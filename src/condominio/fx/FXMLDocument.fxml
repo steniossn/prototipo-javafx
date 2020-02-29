@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="condominio.fx.FXMLDocumentController">
+    <children>
+        <TabPane fx:id="tabPane" prefHeight="680.0" prefWidth="574.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <tabs>
+                <Tab id="tabMoradores" fx:id="tabMoradores" text="Moradores">
+                    <content>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true" prefHeight="549.0" prefWidth="556.0">
+                            <content>
+                                <AnchorPane prefHeight="649.0" prefWidth="572.0">
+                                    <children>
+                                        <VBox layoutX="14.0" layoutY="124.0" prefHeight="507.0" prefWidth="552.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="30.0">
+                                            <children>
+                                                <HBox prefHeight="37.0" prefWidth="544.0">
+                                                    <children>
+                                                        <Label prefHeight="20.0" prefWidth="50.0" text="Casa:">
+                                                            <font>
+                                                                <Font name="System Bold" size="14.0" />
+                                                            </font>
+                                                        </Label>
+                                          <Button fx:id="btMenos" mnemonicParsing="false" onAction="#btVoltarMoradores" text="&lt;">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font></Button>
+                                          <TextField fx:id="tfCasaM" alignment="CENTER" cacheShape="false" prefHeight="30.0" prefWidth="50.0">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font></TextField>
+                                          <Button fx:id="btMais" mnemonicParsing="false" onAction="#btAvancarMoradores" text="&gt;">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font></Button>
+                                                        <TextField id="tfPesquisarM" fx:id="tfPesquisarM" prefHeight="30.0" prefWidth="400.0" promptText="pesquisar por:" HBox.hgrow="NEVER">
+                                                            <HBox.margin>
+                                                                <Insets left="20.0" />
+                                                            </HBox.margin>
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                                        </TextField>
+                                                        <Button fx:id="btPesquisarM" mnemonicParsing="false" prefHeight="30.0" prefWidth="67.0" text="pesquisar">
+                                                            <HBox.margin>
+                                                                <Insets left="10.0" right="10.0" />
+                                                            </HBox.margin>
+                                                        </Button>
+                                                        <Button id="btLimparM" fx:id="btLimparM" mnemonicParsing="false" onAction="#limpar" prefHeight="30.0" prefWidth="50.0" text="limpar">
+                                                            <HBox.margin>
+                                                                <Insets right="10.0" />
+                                                            </HBox.margin>
+                                                        </Button>
+                                                        <Button fx:id="btSalvarM" mnemonicParsing="false" onAction="#editar" prefHeight="30.0" prefWidth="47.0" text="salvar">
+                                                            <HBox.margin>
+                                                                <Insets right="10.0" />
+                                                            </HBox.margin>
+                                                        </Button>
+                                          <Button fx:id="btEntradaM" mnemonicParsing="false" prefHeight="30.0" text="entrada" textAlignment="CENTER" />
+                                                    </children>
+                                                    <VBox.margin>
+                                                        <Insets />
+                                                    </VBox.margin>
+                                                </HBox>
+                                                <Label text="Nome:">
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0" />
+                                                    </font>
+                                                    <VBox.margin>
+                                                        <Insets top="10.0" />
+                                                    </VBox.margin>
+                                                </Label>
+                                                <TextField fx:id="tfNomeM" prefHeight="30.0" prefWidth="523.0">
+                                                    <VBox.margin>
+                                                        <Insets bottom="10.0" top="10.0" />
+                                                    </VBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                                </TextField>
+                                                <Label text="Telefones:">
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0" />
+                                                    </font>
+                                                    <VBox.margin>
+                                                        <Insets bottom="5.0" />
+                                                    </VBox.margin>
+                                                </Label>
+                                                <HBox prefHeight="37.0" prefWidth="542.0">
+                                                    <children>
+                                                        <TextField fx:id="tfFixoM" alignment="CENTER" prefHeight="30.0" promptText="fixo" HBox.hgrow="ALWAYS">
+                                                            <HBox.margin>
+                                                                <Insets bottom="10.0" top="5.0" />
+                                                            </HBox.margin>
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                                        </TextField>
+                                                        <TextField fx:id="tfCelular1M" alignment="CENTER" prefHeight="30.0" promptText="celular" HBox.hgrow="ALWAYS">
+                                                            <HBox.margin>
+                                                                <Insets left="30.0" right="30.0" top="5.0" />
+                                                            </HBox.margin>
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                                        </TextField>
+                                                        <TextField fx:id="tfCelular2M" alignment="CENTER" prefHeight="30.0" promptText="celular" HBox.hgrow="ALWAYS">
+                                                            <HBox.margin>
+                                                                <Insets top="5.0" />
+                                                            </HBox.margin>
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                                        </TextField>
+                                                    </children>
+                                                </HBox>
+                                                <Label text="Carros:">
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0" />
+                                                    </font>
+                                                    <VBox.margin>
+                                                        <Insets bottom="10.0" />
+                                                    </VBox.margin>
+                                                </Label>
+                                                <TextField fx:id="tfCarro1m" prefHeight="30.0" prefWidth="479.0">
+                                                    <VBox.margin>
+                                                        <Insets bottom="5.0" />
+                                                    </VBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                                </TextField>
+                                                <TextField fx:id="tfCarro2m" prefHeight="30.0" prefWidth="479.0">
+                                                    <VBox.margin>
+                                                        <Insets bottom="5.0" />
+                                                    </VBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                                </TextField>
+                                                <TextField fx:id="tfCarro3m" prefHeight="30.0" prefWidth="479.0">
+                                                    <VBox.margin>
+                                                        <Insets bottom="5.0" />
+                                                    </VBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                                </TextField>
+                                                <TextField fx:id="tfCarro4m" prefHeight="30.0" prefWidth="479.0">
+                                                    <VBox.margin>
+                                                        <Insets bottom="5.0" />
+                                                    </VBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                                </TextField>
+                                                <TextField fx:id="tfCarro5m" prefHeight="30.0" prefWidth="479.0">
+                                                    <VBox.margin>
+                                                        <Insets bottom="5.0" />
+                                                    </VBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                                </TextField>
+                                                <Label text="Diarista:">
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0" />
+                                                    </font>
+                                                    <VBox.margin>
+                                                        <Insets top="5.0" />
+                                                    </VBox.margin>
+                                                </Label>
+                                                <TextField fx:id="tfDiarista" prefHeight="30.0" prefWidth="479.0">
+                                                    <VBox.margin>
+                                                        <Insets top="5.0" />
+                                                    </VBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                                </TextField>
+                                                <Label text="Como chegar:">
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0" />
+                                                    </font>
+                                                    <VBox.margin>
+                                                        <Insets top="5.0" />
+                                                    </VBox.margin>
+                                                </Label>
+                                                <TextField fx:id="tfComoChegar" prefHeight="30.0" prefWidth="479.0">
+                                                    <VBox.margin>
+                                                        <Insets bottom="10.0" top="5.0" />
+                                                    </VBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                                </TextField>
+                                                <TextArea fx:id="taAnotacoesM" prefHeight="139.0" prefWidth="994.0" promptText="anotações">
+                                                    <font>
+                                                        <Font size="14.0" />
+                                                    </font>
+                                                    <VBox.margin>
+                                                        <Insets bottom="10.0" />
+                                                    </VBox.margin>
+                                                </TextArea>
+                                                <HBox prefHeight="46.0" prefWidth="994.0">
+                                                    <children>
+                                                        <ComboBox fx:id="cbVisitantesM" maxWidth="1.7976931348623157E308" prefHeight="30.0" HBox.hgrow="ALWAYS">
+                                                            <HBox.margin>
+                                                                <Insets right="15.0" />
+                                                            </HBox.margin>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>                                            
+                                                        </ComboBox>
+                                                        <Button fx:id="btSaidaM" mnemonicParsing="false" prefHeight="30.0" text="saida">
+                                                            <HBox.margin>
+                                                                <Insets />
+                                                            </HBox.margin>
+                                                        </Button>
+                                                    </children>
+                                                    <VBox.margin>
+                                                        <Insets />
+                                                    </VBox.margin>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                        </ScrollPane>
+                    </content>
+                </Tab>
+                <Tab id="tabServicos" fx:id="tabServicos" text="Serviços">
+                    <content>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0">
+                            <content>
+                                <AnchorPane prefHeight="650.0" prefWidth="572.0">
+                                    <children>
+                                        <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <children>
+                                    <HBox prefHeight="37.0" prefWidth="544.0">
+                                       <children>
+                                          <Label prefHeight="30.0" prefWidth="50.0" text="ID:">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <Button fx:id="btMenosS" mnemonicParsing="false" onAction="#botaoVoltarServico" prefHeight="30.0" text="&lt;" />
+                                          <TextField fx:id="tfIdS" prefHeight="30.0" prefWidth="60.0">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font></TextField>
+                                          <Button fx:id="btMaisS" mnemonicParsing="false" onAction="#botaoAvancarServico" prefHeight="30.0" text="&gt;" />
+                                          <TextField fx:id="tfPesquisarS" onDragDetected="#pesquisarComEnter" prefHeight="30.0" prefWidth="191.0" promptText="pesquisar prestador de serviços">
+                                             <HBox.margin>
+                                                <Insets left="20.0" />
+                                             </HBox.margin>
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </TextField>
+                                          <Button fx:id="btPesquisarS" mnemonicParsing="false" onAction="#botaoPesquisarServicos" prefHeight="30.0" text="pesquisar" />
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets left="10.0" top="30.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                                <Label text="Prestador:">
+                                                    <VBox.margin>
+                                                        <Insets bottom="10.0" left="10.0" top="10.0" />
+                                                    </VBox.margin>
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0" />
+                                                    </font>
+                                                </Label>
+                                                <TextField fx:id="tfPrestador" prefHeight="30.0" prefWidth="493.0" promptText="empresa ou colaborador">
+                                                    <VBox.margin>
+                                                        <Insets left="10.0" right="10.0" />
+                                                    </VBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                                </TextField>
+                                                <Label text="Telefones:">
+                                                    <padding>
+                                                        <Insets bottom="10.0" top="10.0" />
+                                                    </padding>
+                                                    <VBox.margin>
+                                                        <Insets left="10.0" />
+                                                    </VBox.margin>
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0" />
+                                                    </font>
+                                                </Label>
+                                                <HBox prefHeight="26.0" prefWidth="574.0">
+                                                    <children>
+                                                        <TextField fx:id="tfFixoS" prefHeight="30.0" promptText="fixo" HBox.hgrow="ALWAYS">
+                                                            <HBox.margin>
+                                                                <Insets />
+                                                            </HBox.margin>
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                                        </TextField>
+                                                        <TextField fx:id="tfCelular1s" prefHeight="30.0" promptText="celular" HBox.hgrow="ALWAYS">
+                                                            <HBox.margin>
+                                                                <Insets left="30.0" right="30.0" />
+                                                            </HBox.margin>
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                                        </TextField>
+                                                        <TextField fx:id="ftCelular2s" prefHeight="30.0" promptText="celular" HBox.hgrow="ALWAYS">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font></TextField>
+                                                    </children>
+                                                    <VBox.margin>
+                                                        <Insets bottom="10.0" top="10.0" />
+                                                    </VBox.margin>
+                                                    <padding>
+                                                        <Insets left="10.0" right="10.0" />
+                                                    </padding>
+                                                </HBox>
+                                                <Label text="Serviços:">
+                                                    <VBox.margin>
+                                                        <Insets bottom="10.0" top="10.0" />
+                                                    </VBox.margin>
+                                                    <padding>
+                                                        <Insets left="10.0" />
+                                                    </padding>
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0" />
+                                                    </font>
+                                                </Label>
+                                                <TextField fx:id="tfServicos" prefHeight="30.0">
+                                                    <VBox.margin>
+                                                        <Insets left="10.0" right="10.0" />
+                                                    </VBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                                </TextField>
+                                                <Label text="Anotações:">
+                                                    <VBox.margin>
+                                                        <Insets bottom="10.0" left="10.0" top="10.0" />
+                                                    </VBox.margin>
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0" />
+                                                    </font>
+                                                </Label>
+                                                <TextArea fx:id="taAnotacaoS" prefHeight="188.0" prefWidth="494.0">
+                                                    <VBox.margin>
+                                                        <Insets left="10.0" right="10.0" />
+                                                    </VBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                                </TextArea>
+                                                <HBox prefHeight="16.0" prefWidth="564.0">
+                                                    <children>
+                                                        <Button fx:id="btSalvarS" mnemonicParsing="false" onAction="#Editar" text="salvar">
+                                                            <HBox.margin>
+                                                                <Insets right="10.0" />
+                                                            </HBox.margin>
+                                                            <font>
+                                                                <Font size="14.0" />
+                                                            </font>
+                                                        </Button>
+                                                        <Button fx:id="btLimparS" mnemonicParsing="false" onAction="#LimparServicos" text="limpar">
+                                                            <font>
+                                                                <Font size="14.0" />
+                                                            </font>
+                                                        </Button>
+                                          <Button mnemonicParsing="false" onAction="#excluirServico" prefHeight="34.0" prefWidth="52.0" text="excluir">
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                                    </children>
+                                                    <VBox.margin>
+                                                        <Insets bottom="10.0" left="10.0" top="10.0" />
+                                                    </VBox.margin>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                        </ScrollPane>
+                    </content>
+                </Tab>
+                <Tab id="tabRecados" fx:id="tabRecados" text="Recados">
+                    <content>
+                        <TextArea fx:id="taRecados" promptText="anotaçoes e avisos">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </TextArea>
+                    </content>
+                </Tab>
+                <Tab id="tabRecados" fx:id="tabRelatorios" text="Relatorio">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <HBox prefHeight="7.0" prefWidth="1024.0" VBox.vgrow="SOMETIMES">
+                                 <children>
+                                    <Button fx:id="btVoltar" mnemonicParsing="false" onAction="#voltarDiaRelatorio" text="&lt;&lt;&lt;" />
+                                    <Label fx:id="dataRelatorio" alignment="CENTER" onMouseClicked="#escolherDataRelatorio" prefHeight="16.0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets left="40.0" right="40.0" />
+                                       </HBox.margin>
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Button fx:id="btAvancar" mnemonicParsing="false" onAction="#avancarDiaRelatorio" text="&gt;&gt;&gt;">
+                                       <HBox.margin>
+                                          <Insets right="15.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="10.0" right="10.0" top="20.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <TextField fx:id="pesquisarRelatorio" onAction="#pesquisarVisita" promptText="procurar entradas anteriores.">
+                                       <VBox.margin>
+                                          <Insets left="10.0" right="10.0" top="20.0" />
+                                       </VBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                    <TextArea fx:id="taRelatorio" editable="false" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                       <VBox.margin>
+                                          <Insets left="10.0" right="10.0" top="20.0" />
+                                       </VBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextArea>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </VBox>
+                           </children>
+                        </VBox>
+                     </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </children>
+</AnchorPane>
