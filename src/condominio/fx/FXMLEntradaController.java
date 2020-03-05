@@ -33,7 +33,9 @@ import util.Variaveis;
  */
 public class FXMLEntradaController implements Initializable {
 
-    @FXML
+
+    
+     @FXML
     private TextField tfEntrada;
 
     @FXML
@@ -43,16 +45,7 @@ public class FXMLEntradaController implements Initializable {
     private Button btnOk;
 
     @FXML
-    private Label ID;
-        
-    @FXML
-    private CheckBox cbTrazerVisita;
-    
-    @FXML
-    private CheckBox cbBuscarVisita;
-    
-    @FXML
-    private TextField tfMotorista;
+    private CheckBox cbUber;
 
     @FXML
     private Button btnCancelar;
@@ -61,10 +54,14 @@ public class FXMLEntradaController implements Initializable {
     private TextField tfPlaca;
 
     @FXML
-    private TextField tfNome;
-    
+    private TextField tfMotorista;
+
     @FXML
-    private ComboBox combBVisita;
+    private Label ID;
+
+    @FXML
+    private TextField tfNome;
+
     
     
     
@@ -94,7 +91,7 @@ public class FXMLEntradaController implements Initializable {
         
         // ao apertar ok pegar o nome informado e acionar metodo 
         btnOk.setOnAction((ActionEvent event) -> {
-            if (cbTrazerVisita.isSelected()) {
+            if (cbUber.isSelected()) {
                 tfNome.setText(inicialMaiuscula(tfNome.getText()));
                 visitaDeUber();
             } else {
