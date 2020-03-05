@@ -24,7 +24,7 @@
                                             <children>
                                                 <HBox prefHeight="37.0" prefWidth="544.0">
                                                     <children>
-                                                        <Label prefHeight="20.0" prefWidth="50.0" text="Casa:">
+                                                        <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="50.0" text="Casa:">
                                                             <font>
                                                                 <Font name="System Bold" size="14.0" />
                                                             </font>
@@ -33,7 +33,7 @@
                                              <font>
                                                 <Font size="14.0" />
                                              </font></Button>
-                                          <TextField fx:id="tfCasaM" alignment="CENTER" cacheShape="false" prefHeight="30.0" prefWidth="50.0">
+                                          <TextField fx:id="tfCasaM" alignment="CENTER" cacheShape="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="50.0">
                                              <font>
                                                 <Font size="14.0" />
                                              </font></TextField>
@@ -41,7 +41,7 @@
                                              <font>
                                                 <Font size="14.0" />
                                              </font></Button>
-                                                        <TextField id="tfPesquisarM" fx:id="tfPesquisarM" prefHeight="30.0" prefWidth="400.0" promptText="pesquisar por:" HBox.hgrow="NEVER">
+                                                        <TextField id="tfPesquisarM" fx:id="tfPesquisarM" prefHeight="30.0" prefWidth="400.0" promptText="pesquisar por:">
                                                             <HBox.margin>
                                                                 <Insets left="20.0" />
                                                             </HBox.margin>
@@ -49,22 +49,22 @@
                                                 <Font size="14.0" />
                                              </font>
                                                         </TextField>
-                                                        <Button fx:id="btPesquisarM" mnemonicParsing="false" prefHeight="30.0" prefWidth="67.0" text="pesquisar">
+                                                        <Button fx:id="btPesquisarM" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="67.0" text="pesquisar" HBox.hgrow="SOMETIMES">
                                                             <HBox.margin>
                                                                 <Insets left="10.0" right="10.0" />
                                                             </HBox.margin>
                                                         </Button>
-                                                        <Button id="btLimparM" fx:id="btLimparM" mnemonicParsing="false" onAction="#limpar" prefHeight="30.0" prefWidth="50.0" text="limpar">
+                                                        <Button id="btLimparM" fx:id="btLimparM" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#limpar" prefHeight="30.0" prefWidth="50.0" text="limpar" HBox.hgrow="NEVER">
                                                             <HBox.margin>
                                                                 <Insets right="10.0" />
                                                             </HBox.margin>
                                                         </Button>
-                                                        <Button fx:id="btSalvarM" mnemonicParsing="false" onAction="#editar" prefHeight="30.0" prefWidth="47.0" text="salvar">
+                                                        <Button fx:id="btSalvarM" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#editar" prefHeight="30.0" prefWidth="47.0" text="salvar" HBox.hgrow="NEVER">
                                                             <HBox.margin>
                                                                 <Insets right="10.0" />
                                                             </HBox.margin>
                                                         </Button>
-                                          <Button fx:id="btEntradaM" mnemonicParsing="false" prefHeight="30.0" text="entrada" textAlignment="CENTER" />
+                                          <Button fx:id="btEntradaM" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" text="entrada" textAlignment="CENTER" HBox.hgrow="NEVER" />
                                                     </children>
                                                     <VBox.margin>
                                                         <Insets />
@@ -220,7 +220,7 @@
                                                 <Cursor fx:constant="DEFAULT" />
                                              </cursor>                                            
                                                         </ComboBox>
-                                                        <Button fx:id="btSaidaM" mnemonicParsing="false" prefHeight="30.0" text="saida">
+                                                        <Button fx:id="btSaidaM" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" text="saida" HBox.hgrow="NEVER">
                                                             <HBox.margin>
                                                                 <Insets />
                                                             </HBox.margin>
