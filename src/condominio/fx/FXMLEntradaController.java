@@ -18,12 +18,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-import javax.swing.JOptionPane;
 import util.Variaveis;
 
 /**
@@ -33,9 +31,7 @@ import util.Variaveis;
  */
 public class FXMLEntradaController implements Initializable {
 
-
-    
-     @FXML
+    @FXML
     private TextField tfEntrada;
 
     @FXML
@@ -62,61 +58,26 @@ public class FXMLEntradaController implements Initializable {
     @FXML
     private TextField tfNome;
 
-    
-    
-    
     //***************variaveis****************
-    
     int iD = 0;
-    
 
     public FXMLEntradaController() {
     }
     //int count = -1;
     //String letra;
     //public static ArrayList<String> digitado = new ArrayList();
-   
-    
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-       
-        
+
         //coloca hora do sistema em entrada assim que a janela é aberta
         tfEntrada.setText(Variaveis.DataHora("hora"));
-        
-        // ao apertar ok pegar o nome informado e acionar metodo 
-        btnOk.setOnAction((ActionEvent event) -> {
-            if (cbUber.isSelected()) {
-                tfNome.setText(inicialMaiuscula(tfNome.getText()));
-                visitaDeUber();
-            } else {
-                tfNome.setText(inicialMaiuscula(tfNome.getText()));
-                entrada();
-            }
-
-            tfCasa.requestFocus();
-            
-            //fechar a tela
-            Stage stage = (Stage) btnOk.getScene().getWindow(); //pegar tela atual
-            stage.close(); //fechar
-        });
-
-        //ao apertar botão de cancelar fechar a janela
-        btnCancelar.setOnAction((event) -> {
-            FXMLDocumentController.RAIZ.preencherJCombobox();
-            //finalizar janela
-            Stage stage = (Stage) btnCancelar.getScene().getWindow(); //pegar tela atual
-            stage.close(); //fechar
-            
-        });
 
         //ao apertar enter trocar o foco 
-        tfCasa.setOnAction((event) -> {
+        tfCasa.setOnAction((ActionEvent event) -> {
             tfNome.requestFocus();
         });
 
@@ -134,16 +95,14 @@ public class FXMLEntradaController implements Initializable {
             }
         });
 
-        
         tfPlaca.setOnAction((event) -> {
             //salva e fecha
             entrada();
-             //finalizar janela
+            //finalizar janela
             Stage stage = (Stage) btnCancelar.getScene().getWindow(); //pegar tela atual
             stage.close(); //fechar
-            
-        });
 
+        });
 
         tfPlaca.setOnKeyTyped((event) -> {
             String letra = event.getCharacter();
@@ -153,7 +112,7 @@ public class FXMLEntradaController implements Initializable {
             String texto = tfPlaca.getText();
             if (texto.matches(letrasPlaca)) {
                 tfPlaca.setText(texto.toUpperCase(Locale.ROOT) + "-");
-               //coloca o caracter na ultima posição
+                //coloca o caracter na ultima posição
                 tfPlaca.end();
             }
             if (texto.matches(padrao)) {
@@ -163,7 +122,33 @@ public class FXMLEntradaController implements Initializable {
         });
     }
 
+    @FXML
+    //ao apertar botão de cancelar fechar a janela
+    public void botaoCancelar() {
+        FXMLDocumentController.RAIZ.preencherJCombobox();
+        //finalizar janela
+        Stage stage = (Stage) btnCancelar.getScene().getWindow(); //pegar tela atual
+        stage.close(); //fechar
+    }
 
+    @FXML
+    // ao apertar ok pegar o nome informado e acionar metodo 
+    public void botaoOk() {
+        if (cbUber.isSelected()) {
+            tfNome.setText(inicialMaiuscula(tfNome.getText()));
+            visitaDeUber();
+        } else {
+            tfNome.setText(inicialMaiuscula(tfNome.getText()));
+            entrada();
+        }
+
+        tfCasa.requestFocus();
+
+        //fechar a tela
+        Stage stage = (Stage) btnOk.getScene().getWindow(); //pegar tela atual
+        stage.close(); //fechar
+
+    }
 
     //capiturar os dados e salvar em txt
     public void entrada() {
@@ -180,12 +165,12 @@ public class FXMLEntradaController implements Initializable {
             entrada.add(4, "Entrada: " + tfEntrada.getText());
             entrada.add(5, "Saida:");
             Files.write(Variaveis.relatorio(), entrada, Charset.defaultCharset());
-            
+
             //metodo de outra classe que carrega um combobox 
             FXMLDocumentController.RAIZ.preencherJCombobox();
 
         } catch (IOException ex) {
-            alerta("erro","não foi possivel registrar os dados" );
+            alerta("erro", "não foi possivel registrar os dados");
             //JOptionPane.showMessageDialog(null, "não foi possivel registrar os dados");
         }
 
@@ -221,8 +206,8 @@ public class FXMLEntradaController implements Initializable {
             FXMLDocumentController.RAIZ.preencherJCombobox();
 
         } catch (IOException ex) {
-            alerta("erro","não foi possivel registrar os dados" );
-           // JOptionPane.showMessageDialog(null, "não foi possivel registrar os dados");
+            alerta("erro", "não foi possivel registrar os dados");
+            // JOptionPane.showMessageDialog(null, "não foi possivel registrar os dados");
         }
     }
 
@@ -235,16 +220,14 @@ public class FXMLEntradaController implements Initializable {
         }
         return nome.toString().replace("[", "").replace("]", "").replaceAll(",", "");
     }
-    
-    public void alerta(String title , String text ){
+
+    public void alerta(String title, String text) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(text);
         alert.setContentText(null);
-        alert.show();     
-        
+        alert.show();
+
     }
-    
-    
-    
+
 }
