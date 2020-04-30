@@ -205,6 +205,8 @@ public class FXMLDocumentController implements Initializable {
         });
 
         btSaidaM.setOnMouseClicked((MouseEvent event) -> {
+            //verificar se existe um arquivo com os dados 
+            criarArquivo();
             Icon icoLeft = new ImageIcon(getClass().getResource("/imagens/icon/mouse_esquerdo.png"));
             Icon icoRigh = new ImageIcon(getClass().getResource("/imagens/icon/mouse_direito.png"));
 
@@ -214,7 +216,7 @@ public class FXMLDocumentController implements Initializable {
                     // ao clicar
                     if (!visitaNoCondominio.equals("não há visitantes")) {
                         // retorna 0 para sim 1 para não e 2 para cancelar
-                        criarArquivo();
+                        
                         int resposta = JOptionPane.showConfirmDialog(null, "adicionar hora de saida para esse visitante, " + visitaNoCondominio + " ?", "horario do sistema", 1, JOptionPane.ERROR_MESSAGE, icoLeft);
                         if (resposta == 0) {
                             addSaida();
@@ -230,7 +232,7 @@ public class FXMLDocumentController implements Initializable {
 
                     if (!visitaNoCondominio.equals("não há visitantes")) {
                         // retorna 0 para sim 1 para não e 2 para cancelar
-                        criarArquivo();
+                       
                         int resposta = JOptionPane.showConfirmDialog(null, "adicionar hora de saida para esse visitante, " + visitaNoCondominio + " ?", "gerar horario", 1, JOptionPane.ERROR_MESSAGE, icoRigh);
                         if (resposta == 0) {
                             String respostaSaida = JOptionPane.showInputDialog("qual foi o horario de saida?");
@@ -383,7 +385,7 @@ public class FXMLDocumentController implements Initializable {
      * @param path pasta de arquivos
      * @param path2 pasta de arquivos
      */
-    public void salvarArquivo(String arquivo, Path path, Path path2) {
+    public void salvarArquivo(Path path, Path path2) {
 
         try {
 
@@ -442,10 +444,10 @@ public class FXMLDocumentController implements Initializable {
                 String arquivo = "casa" + pegarNumeroCasa + ".txt";
                 //essas duas proximas strings foram feitas pq o metodo pede dois paths e os paths de variaveis reference apenas a pasta e não ao arquivo
                 String pastaCasa = Variaveis.CASAS + FileSystems.getDefault().getSeparator() + arquivo;
-                String pastaDadosApp = Variaveis.PASTADADOSAPP + FileSystems.getDefault().getSeparator() + "casa" + pegarNumeroCasa;
+                String pastaDadosApp = Variaveis.PASTADADOSAPP + FileSystems.getDefault().getSeparator() + "casa_" + pegarNumeroCasa;
 
                 //aqui é escrito um novo aquivo 
-                salvarArquivo(arquivo, Paths.get(pastaCasa), Paths.get(pastaDadosApp));
+                salvarArquivo(Paths.get(pastaCasa), Paths.get(pastaDadosApp));
             } else if (perg1 == 1 | perg1 == 2 | perg1 == -1) {
                 JOptionPane.showMessageDialog(null, "cancelado! não foi feito alterações!");
             }
