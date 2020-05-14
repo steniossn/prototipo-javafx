@@ -125,7 +125,7 @@ public class FXMLEntradaController implements Initializable {
     @FXML
     //ao apertar botão de cancelar fechar a janela
     public void botaoCancelar() {
-        FXMLDocumentController.RAIZ.preencherJCombobox();
+        FXMLPrincipal.RAIZ.preencherJCombobox();
         //finalizar janela
         Stage stage = (Stage) btnCancelar.getScene().getWindow(); //pegar tela atual
         stage.close(); //fechar
@@ -134,24 +134,33 @@ public class FXMLEntradaController implements Initializable {
     @FXML
     // ao apertar ok pegar o nome informado e acionar metodo 
     public void botaoOk() {
+        Boolean salvo;
+        
         if (cbUber.isSelected()) {
             tfNome.setText(inicialMaiuscula(tfNome.getText()));
-            visitaDeUber();
+            salvo = visitaDeUber();            
         } else {
             tfNome.setText(inicialMaiuscula(tfNome.getText()));
-            entrada();
+            salvo = entrada();
         }
+        
+        if(salvo){
+            tfCasa.requestFocus();
 
-        tfCasa.requestFocus();
+            //fechar a tela
+            Stage stage = (Stage) btnOk.getScene().getWindow(); //pegar tela atual
+            stage.close(); //fechar
+        }else{
+            alerta("erro", "não foi possivel registrar os dados");
+            //criar codigo que reinicie a aplicação principal
+        }
+        
 
-        //fechar a tela
-        Stage stage = (Stage) btnOk.getScene().getWindow(); //pegar tela atual
-        stage.close(); //fechar
 
     }
 
     //capiturar os dados e salvar em txt
-    public void entrada() {
+    public Boolean entrada() {
         try {
 
             byte[] bytes = Files.readAllBytes(Variaveis.relatorio());
@@ -167,17 +176,20 @@ public class FXMLEntradaController implements Initializable {
             Files.write(Variaveis.relatorio(), entrada, Charset.defaultCharset());
 
             //metodo de outra classe que carrega um combobox 
-            FXMLDocumentController.RAIZ.preencherJCombobox();
+            FXMLPrincipal.RAIZ.preencherJCombobox();
+            
+            return true;
 
         } catch (IOException ex) {
             alerta("erro", "não foi possivel registrar os dados");
             //JOptionPane.showMessageDialog(null, "não foi possivel registrar os dados");
+            return false;
         }
 
     }
 
     //add o visitante que veio de uber 
-    public void visitaDeUber() {
+    public Boolean visitaDeUber() {
         try {
 
             byte[] bytes = Files.readAllBytes(Variaveis.relatorio());
@@ -203,11 +215,14 @@ public class FXMLEntradaController implements Initializable {
             //escreve em um arquivo
             Files.write(Variaveis.relatorio(), entrada, Charset.defaultCharset());
             //metodo de outra classe que carrega um combobox
-            FXMLDocumentController.RAIZ.preencherJCombobox();
+            FXMLPrincipal.RAIZ.preencherJCombobox();
+            
+            return true;
 
         } catch (IOException ex) {
             alerta("erro", "não foi possivel registrar os dados");
             // JOptionPane.showMessageDialog(null, "não foi possivel registrar os dados");
+            return false;
         }
     }
 

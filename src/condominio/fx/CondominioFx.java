@@ -21,7 +21,7 @@ public class CondominioFx extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("FXMLPrincipal.fxml"));
         
         Scene scene = new Scene(root);
         Image icon = new Image(getClass().getResourceAsStream("/imagens/icon/casa.png"));        

@@ -101,12 +101,12 @@
                   <Insets left="10.0" right="10.0" />
                </VBox.margin>
                <children>
-                  <Button fx:id="btnCancelar" mnemonicParsing="false" text="cancelar">
+                  <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#botaoCancelar" text="cancelar">
                      <HBox.margin>
                         <Insets right="15.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="btnOk" mnemonicParsing="false" text="ok" />
+                  <Button fx:id="btnOk" mnemonicParsing="false" onAction="#botaoOk" text="ok" />
                   <Label fx:id="ID" text="ID" visible="false">
                      <HBox.margin>
                         <Insets left="20.0" />

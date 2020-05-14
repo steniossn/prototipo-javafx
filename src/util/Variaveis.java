@@ -26,11 +26,11 @@ public class Variaveis {
 
     //Paths
     //Paths
-    public static Path PASTAPRINCIPAL = Paths.get(RecuperaRaiz() + "CondominioFx/Dados/" + FileSystems.getDefault().getSeparator());
-    public static Path PASTADADOSAPP = Paths.get(RecuperaRaiz() + "CondominioFx/Dados/DadosApp" + FileSystems.getDefault().getSeparator());
-    public static Path PASTARELATORIO = Paths.get(RecuperaRaiz() + "CondominioFx/Dados/Relatorio/" + FileSystems.getDefault().getSeparator());
-    public static Path CASAS = Paths.get(RecuperaRaiz() + "CondominioFx/Dados/Casas" + FileSystems.getDefault().getSeparator());
-    public static Path SERVICOS = Paths.get(RecuperaRaiz() + "CondominioFx/Dados/Servicos/" + FileSystems.getDefault().getSeparator());
+    public static final Path PASTAPRINCIPAL = Paths.get(RecuperaRaiz() + "CondominioFxTeste/Dados/" + FileSystems.getDefault().getSeparator());
+    public static Path PASTADADOSAPP = Paths.get(PASTAPRINCIPAL + "/DadosApp/" + FileSystems.getDefault().getSeparator());
+    public static Path PASTARELATORIO = Paths.get(PASTAPRINCIPAL + "/Relatorio/" + FileSystems.getDefault().getSeparator());
+    public static Path CASAS = Paths.get(PASTAPRINCIPAL + "/Casas/" + FileSystems.getDefault().getSeparator());
+    public static Path SERVICOS = Paths.get(PASTAPRINCIPAL + "/Servicos/" + FileSystems.getDefault().getSeparator());
 
    
     public static String RecuperaRaiz() {
@@ -87,12 +87,19 @@ public class Variaveis {
     }
 
     public static String DataHora(String string) {
+        //nova instancia de calendario
         Calendar c1 = Calendar.getInstance();
+        //instancia de data
         DateFormat formataData = DateFormat.getDateInstance();
+        //gera string com a data
         String data = formataData.format(c1.getTime());
+        //instancia de hora
         DateFormat formathora = DateFormat.getTimeInstance();
+        //string com a hora
         String hora = formathora.format(c1.getTime());
+        // inteiro de hora
         int apenasHora = c1.get(Calendar.HOUR_OF_DAY);
+        // inteiro de minutos
         int minutos = c1.get(Calendar.MINUTE);
 
         switch (string) {

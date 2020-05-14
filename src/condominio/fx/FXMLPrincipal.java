@@ -54,7 +54,7 @@ import util.Variaveis;
  *
  * @author portaria
  */
-public class FXMLDocumentController implements Initializable {
+public class FXMLPrincipal implements Initializable {
 
     //painel principal
     @FXML
@@ -168,7 +168,7 @@ public class FXMLDocumentController implements Initializable {
     int idServico = 0;
 
     // essa instancia para ser usada em outra classe 
-    public static FXMLDocumentController RAIZ;
+    public static FXMLPrincipal RAIZ;
 
     Path caminho = Paths.get(Variaveis.PASTAPRINCIPAL + "/Recados.txt"); //CAMIMNHO
 
@@ -176,7 +176,7 @@ public class FXMLDocumentController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         //criar atalho para o objeto, usar em outra classe
-        RAIZ = FXMLDocumentController.this;
+        RAIZ = FXMLPrincipal.this;
 
         // TODO
         Variaveis.CriarPastas();
@@ -216,7 +216,6 @@ public class FXMLDocumentController implements Initializable {
                     // ao clicar
                     if (!visitaNoCondominio.equals("não há visitantes")) {
                         // retorna 0 para sim 1 para não e 2 para cancelar
-                        
                         int resposta = JOptionPane.showConfirmDialog(null, "adicionar hora de saida para esse visitante, " + visitaNoCondominio + " ?", "horario do sistema", 1, JOptionPane.ERROR_MESSAGE, icoLeft);
                         if (resposta == 0) {
                             addSaida();
@@ -275,7 +274,7 @@ public class FXMLDocumentController implements Initializable {
                 s1.setScene(scene);
                 s1.show();
             } catch (IOException ex) {
-                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(FXMLPrincipal.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
 
@@ -332,7 +331,7 @@ public class FXMLDocumentController implements Initializable {
                 numeroCasa = 0;
             }
         } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FXMLPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
         //define como qual digito deve ter ao iniciar
         tfCasaM.setText(Integer.toString(numeroCasa));
@@ -969,8 +968,8 @@ public class FXMLDocumentController implements Initializable {
         if (visitantes.isEmpty()) {
             cbVisitantesM.setPromptText("sem entradas");
             cbVisitantesM.getItems().clear();
-        } else {
-            cbVisitantesM.setPromptText("entradas registradas");
+        } else {   
+            cbVisitantesM.setPromptText("entradas registradas"); 
             cbVisitantesM.getItems().clear();
             cbVisitantesM.getItems().addAll(visitantes);
 
@@ -1252,7 +1251,7 @@ public class FXMLDocumentController implements Initializable {
                 LimparServicos();
             }
         } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FXMLPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
         //define com qual digito deve  iniciar
         tfIdS.setText(Integer.toString(idServico));
@@ -1492,7 +1491,7 @@ public class FXMLDocumentController implements Initializable {
             
 
         } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FXMLPrincipal.class.getName()).log(Level.SEVERE, null, ex);
 
         }
 
