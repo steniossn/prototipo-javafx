@@ -24,15 +24,17 @@ import javax.swing.JOptionPane;
  */
 public class Variaveis {
 
-    //Paths
-    //Paths
+    //Paths 
+    //usar essa para testes 
     public static final Path PASTAPRINCIPAL = Paths.get(RecuperaRaiz() + "CondominioFxTeste/Dados/" + FileSystems.getDefault().getSeparator());
+   // public static final Path PASTAPRINCIPAL = Paths.get(RecuperaRaiz() + "CondominioFx/Dados/" + FileSystems.getDefault().getSeparator());
     public static Path PASTADADOSAPP = Paths.get(PASTAPRINCIPAL + "/DadosApp/" + FileSystems.getDefault().getSeparator());
     public static Path PASTARELATORIO = Paths.get(PASTAPRINCIPAL + "/Relatorio/" + FileSystems.getDefault().getSeparator());
     public static Path CASAS = Paths.get(PASTAPRINCIPAL + "/Casas/" + FileSystems.getDefault().getSeparator());
     public static Path SERVICOS = Paths.get(PASTAPRINCIPAL + "/Servicos/" + FileSystems.getDefault().getSeparator());
+    
+    public static Calendar c1 = Calendar.getInstance() ;
 
-   
     public static String RecuperaRaiz() {
 
         Iterable<Path> dirs = FileSystems.getDefault().getRootDirectories();// 
@@ -86,9 +88,7 @@ public class Variaveis {
 
     }
 
-    public static String DataHora(String string) {
-        //nova instancia de calendario
-        Calendar c1 = Calendar.getInstance();
+    public static String DataHora(String string) {        
         //instancia de data
         DateFormat formataData = DateFormat.getDateInstance();
         //gera string com a data

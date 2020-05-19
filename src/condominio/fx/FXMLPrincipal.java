@@ -30,7 +30,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
@@ -48,6 +47,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import util.ThreadMeiaNoite;
 import util.Variaveis;
 
 /**
@@ -148,8 +148,6 @@ public class FXMLPrincipal implements Initializable {
     @FXML
     private Tab tabRelatorios;
     @FXML
-    private ListView<?> lvRelatorio;
-    @FXML
     private Label dataRelatorio;
     @FXML
     private TextArea taRelatorio;
@@ -175,14 +173,22 @@ public class FXMLPrincipal implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        //criar atalho para o objeto, usar em outra classe
-        RAIZ = FXMLPrincipal.this;
-
+                //criar atalho para o objeto, usar em outra classe
+        RAIZ = FXMLPrincipal.this;        
+        
         // TODO
         Variaveis.CriarPastas();
         criarArquivo();
 
+        //thread que vai verificar o horario para chamar o metodo meia noite
+        ThreadMeiaNoite t = new ThreadMeiaNoite();
+        t.start();
+
         //****************************tab moradores******************************
+        tabMoradores.setOnSelectionChanged((event) -> {
+            preencherJCombobox();
+        });
+
         tfCasaM.setText(Integer.toString(0));
 
         //ao clicar com o mouse apagar texto 
@@ -231,7 +237,7 @@ public class FXMLPrincipal implements Initializable {
 
                     if (!visitaNoCondominio.equals("não há visitantes")) {
                         // retorna 0 para sim 1 para não e 2 para cancelar
-                       
+
                         int resposta = JOptionPane.showConfirmDialog(null, "adicionar hora de saida para esse visitante, " + visitaNoCondominio + " ?", "gerar horario", 1, JOptionPane.ERROR_MESSAGE, icoRigh);
                         if (resposta == 0) {
                             String respostaSaida = JOptionPane.showInputDialog("qual foi o horario de saida?");
@@ -257,20 +263,20 @@ public class FXMLPrincipal implements Initializable {
 
         btEntradaM.setOnAction((ActionEvent event) -> {
             try {
-                
+
                 //criar o arquivo caso não exista
                 criarArquivo();
-                
+
                 //cria o painel principal
                 Stage s1 = new Stage();
-                
+
                 Parent root = FXMLLoader.load(getClass().getResource("FXMLEntrada.fxml"));
-                
+
                 Image icon = new Image(getClass().getResourceAsStream("/imagens/icon/casa.png"));
                 s1.getIcons().add(icon);
                 s1.setTitle("Cadastros");
                 Scene scene = new Scene(root);
-                
+
                 s1.setScene(scene);
                 s1.show();
             } catch (IOException ex) {
@@ -294,8 +300,7 @@ public class FXMLPrincipal implements Initializable {
         //*******************fim moradores**************************************
         //******************tab recados****************************************
         tabRecados.setOnSelectionChanged((event) -> {
-            
-            
+
             if (tabRecados.isSelected()) {
                 LerRecados();
             }
@@ -310,16 +315,19 @@ public class FXMLPrincipal implements Initializable {
         tabRelatorios.setOnSelectionChanged((event) -> {
             //colocar data atual
             dataRelatorio.setText(Variaveis.mudaDatas(Variaveis.DataHora("data")).replace(".", "/"));
-            
+
             //gerar o arquivo do relatorio atual
             criarArquivo();
-            
+
             //coloca o texto na area de texto
             taRelatorio.setText(Variaveis.lerString("Relatorio/" + Variaveis.mudaDatas(Variaveis.DataHora("data")) + ".txt"));
 
         });
+        
+        
 
     }
+
 
 //********************tab moradores*****************************************
     @FXML
@@ -352,7 +360,6 @@ public class FXMLPrincipal implements Initializable {
         }
     }
 
-    @FXML
     public void voltarAvancarTecladoMorador(KeyEvent e) {
 
         if (e.getCode() == LEFT) {
@@ -506,7 +513,6 @@ public class FXMLPrincipal implements Initializable {
     /**
      * mostra o conteudo dos arquivos nos campos correspondentes
      */
-    @FXML
     public void mostrar() {
 
         int local = 1;
@@ -968,8 +974,8 @@ public class FXMLPrincipal implements Initializable {
         if (visitantes.isEmpty()) {
             cbVisitantesM.setPromptText("sem entradas");
             cbVisitantesM.getItems().clear();
-        } else {   
-            cbVisitantesM.setPromptText("entradas registradas"); 
+        } else {
+            cbVisitantesM.setPromptText("entradas registradas");
             cbVisitantesM.getItems().clear();
             cbVisitantesM.getItems().addAll(visitantes);
 
@@ -1084,6 +1090,7 @@ public class FXMLPrincipal implements Initializable {
     }
 
     //verificar se existe registros da visita 
+    @FXML
     public void pesquisarVisita() {
         try {
             int numeroDeArquivos = (int) Files.list(Variaveis.PASTARELATORIO).count();
@@ -1334,7 +1341,6 @@ public class FXMLPrincipal implements Initializable {
         ftCelular2s.setText(split[4].trim());
         tfServicos.setText(split[5].trim());
         taAnotacaoS.setText(split[6].trim());
-        
 
     }
 
@@ -1392,19 +1398,17 @@ public class FXMLPrincipal implements Initializable {
     public void gerarArquivoServico(String servico) {
 
         try {
-
-            //Path caminho = Paths.get("C:/Condominio/Dados/Servicos/" + servico + ".txt");
             Path path = Paths.get(Variaveis.SERVICOS + FileSystems.getDefault().getSeparator() + servico + ".txt");
-            
+
             ArrayList<String> arc1 = new ArrayList<>();
             arc1.add(tfIdS.getText() + ";");
             arc1.add(tfPrestador.getText() + ";");
             arc1.add(tfFixoS.getText() + ";");
             arc1.add(tfCelular1s.getText() + ";");
             arc1.add(ftCelular2s.getText() + ";");
-            arc1.add(tfServicos.getText()+ ";");
+            arc1.add(tfServicos.getText() + ";");
             arc1.add(taAnotacaoS.getText());
-            
+
             Files.write(path, arc1, Charset.defaultCharset());
             JOptionPane.showMessageDialog(null, "Alteraçoes realizadas.");
 
@@ -1423,9 +1427,9 @@ public class FXMLPrincipal implements Initializable {
 
         int perg1 = JOptionPane.showConfirmDialog(null, "Continuar vai alterar os dados! quer continuar?");
         if (perg1 == 0) {
-      
-                gerarArquivoServico("servicos" + tfIdS.getText());
-            
+
+            gerarArquivoServico("servicos" + tfIdS.getText());
+
         } else if (perg1 == 1 | perg1 == 2 | perg1 == -1) {
             perg1 = JOptionPane.CLOSED_OPTION;
         }
@@ -1437,29 +1441,28 @@ public class FXMLPrincipal implements Initializable {
     @FXML
     public void excluirServico() {
         try {
-            
+
             //local do arquivo
             String arquivo = Variaveis.SERVICOS + FileSystems.getDefault().getSeparator() + "servicos" + tfIdS.getText() + ".txt";
-            
+
             int pergunta = JOptionPane.showConfirmDialog(null, "quer realmente excluir os dados?");
-            if(pergunta == 0){
+            if (pergunta == 0) {
                 //apaga o arquivo
                 Files.deleteIfExists(Paths.get(arquivo));
 
                 //usado no nome do arquivo 
                 int n = 0;
 
-                
                 // mudar o nome dos arquivos e o numero de referencia dentro do arquivo 
                 do {
                     //gera um nome em cada entrada no loop
                     String arquivoServico = Variaveis.SERVICOS + FileSystems.getDefault().getSeparator() + "servicos" + (n + 1) + ".txt";
                     //lista quantos arquivos tem na pasta
-                    Object[] toArray = Files.list(Variaveis.SERVICOS).toArray();                    
+                    Object[] toArray = Files.list(Variaveis.SERVICOS).toArray();
                     //renomeia o arquivo existente com o nome gerado no arquivoServico 
                     new File(toArray[n].toString()).renameTo(new File(arquivoServico));
                     //muda o numero dentro do arquivo
-                    String[] lerSplit = lerSplit("servicos" + (n+1));
+                    String[] lerSplit = lerSplit("servicos" + (n + 1));
                     ArrayList<String> a = new ArrayList();
                     a.add(lerSplit[0].trim() + ";");
                     a.add(lerSplit[1].trim() + ";");
@@ -1468,34 +1471,30 @@ public class FXMLPrincipal implements Initializable {
                     a.add(lerSplit[4].trim() + ";");
                     a.add(lerSplit[5].trim() + ";");
                     a.add(lerSplit[6].trim());
-                    
+
                     a.remove(0);
-                    a.add(0,Integer.toString(n + 1 ) + ";");
-                   
-                    
+                    a.add(0, Integer.toString(n + 1) + ";");
+
                     //salvar novo arquivo com alteração 
-                    Files.write(Paths.get(arquivoServico), a , Charset.defaultCharset() );
+                    Files.write(Paths.get(arquivoServico), a, Charset.defaultCharset());
                     //gerarArquivoServico("servicos" + Integer.toString(n+1) );
-                    
+
                     n++;
 
                     //falta renomear o id dentro do arquivo 
                 } while (n < Files.list(Variaveis.SERVICOS).count());
-                
+
                 JOptionPane.showMessageDialog(null, "Alteraçoes realizadas.");
 
                 LimparServicos();
-            }else{
-                
+            } else {
+
             }
-            
 
         } catch (IOException ex) {
             Logger.getLogger(FXMLPrincipal.class.getName()).log(Level.SEVERE, null, ex);
 
         }
-
     }
-
     //********************* fim tab servicos **************************************  
 }

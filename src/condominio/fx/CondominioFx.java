@@ -5,13 +5,14 @@
  */
 package condominio.fx;
 
-
+import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import util.ThreadMeiaNoite;
 
 /**
  *
@@ -20,7 +21,7 @@ import javafx.stage.Stage;
 public class CondominioFx extends Application {
     
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLPrincipal.fxml"));
         
         Scene scene = new Scene(root);
@@ -30,12 +31,22 @@ public class CondominioFx extends Application {
         
         stage.setScene(scene);
         
+        
+        
         stage.show();
     }
-
-    /**
-     * @param args the command line arguments
-     */
+    
+    
+    @Override
+    public void stop() throws Exception{
+         //parar thread
+         ThreadMeiaNoite.EXECUTAR = false;
+         ThreadMeiaNoite.currentThread().interrupt();
+         System.out.println("stop foi usado ;" + ThreadMeiaNoite.currentThread().isAlive());
+         super.stop();
+    }
+    
+    
     public static void main(String[] args) {
         launch(args);
     }
