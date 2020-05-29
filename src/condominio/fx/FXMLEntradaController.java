@@ -22,7 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-import util.Variaveis;
+import util.Metodos;
 
 /**
  * FXML Controller class
@@ -69,12 +69,14 @@ public class FXMLEntradaController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
         //coloca hora do sistema em entrada assim que a janela é aberta
-        tfEntrada.setText(Variaveis.DataHora("hora"));
+        tfEntrada.setText(Metodos.DataHora("hora"));
 
         //ao apertar enter trocar o foco 
         tfCasa.setOnAction((ActionEvent event) -> {
@@ -163,7 +165,7 @@ public class FXMLEntradaController implements Initializable {
     public Boolean entrada() {
         try {
 
-            byte[] bytes = Files.readAllBytes(Variaveis.relatorio());
+            byte[] bytes = Files.readAllBytes(Metodos.relatorio());
             String relatorio = new String(bytes);
 
             ArrayList<String> entrada = new ArrayList<>();
@@ -173,7 +175,7 @@ public class FXMLEntradaController implements Initializable {
             entrada.add(3, "Placa: " + tfPlaca.getText().toUpperCase(Locale.ROOT));
             entrada.add(4, "Entrada: " + tfEntrada.getText());
             entrada.add(5, "Saida:");
-            Files.write(Variaveis.relatorio(), entrada, Charset.defaultCharset());
+            Files.write(Metodos.relatorio(), entrada, Charset.defaultCharset());
 
             //metodo de outra classe que carrega um combobox 
             FXMLPrincipal.RAIZ.preencherJCombobox();
@@ -192,7 +194,7 @@ public class FXMLEntradaController implements Initializable {
     public Boolean visitaDeUber() {
         try {
 
-            byte[] bytes = Files.readAllBytes(Variaveis.relatorio());
+            byte[] bytes = Files.readAllBytes(Metodos.relatorio());
             String relatorio = new String(bytes);
 
             ArrayList<String> entrada = new ArrayList<>();
@@ -213,7 +215,7 @@ public class FXMLEntradaController implements Initializable {
             entrada.add(11, "Saida:");
 
             //escreve em um arquivo
-            Files.write(Variaveis.relatorio(), entrada, Charset.defaultCharset());
+            Files.write(Metodos.relatorio(), entrada, Charset.defaultCharset());
             //metodo de outra classe que carrega um combobox
             FXMLPrincipal.RAIZ.preencherJCombobox();
             

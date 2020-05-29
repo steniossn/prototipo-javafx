@@ -19,10 +19,13 @@ import condominio.fx.FXMLPrincipal;
 public class ThreadMeiaNoite extends Thread {
 
     public static Boolean EXECUTAR = true;
+    String nome;
+    int tempo;
+    Boolean controlador;
 
     public ThreadMeiaNoite() {
     }
-
+    
     @Override
     public void run() {
 //criar ação da thread
@@ -33,12 +36,11 @@ public class ThreadMeiaNoite extends Thread {
         if (EXECUTAR) {
             try {
 
-                String dataHora = Variaveis.DataHora("apenasHora");
-                int minutos = Integer.parseInt(Variaveis.DataHora("minutos")) * 60000;
+                String dataHora = Metodos.DataHora("apenasHora");
+                int minutos = Integer.parseInt(Metodos.DataHora("minutos")) * 60000;
 
                 int esperar = 60000;
 
-                Boolean controlador = true;
 
                 if (!dataHora.equals("0")) {
                     //subtrai de 24 horas o tempo que resta para dar meia noite
@@ -50,10 +52,11 @@ public class ThreadMeiaNoite extends Thread {
                     //fica parado aqui pelo tempo do esperar
                     Thread.sleep(esperar);
                     //vai checar se existe o arquivo 
+                    controlador = true;
                     while (controlador) {
                         System.out.println("thread executando..." + esperar++);
                         Thread.sleep(60000);
-                        dataHora = Variaveis.DataHora("apenasHora");
+                        dataHora = Metodos.DataHora("apenasHora");
                         if (dataHora.equals("0")) {
                             //vai checar se existe o arquivo 
                             FXMLPrincipal.RAIZ.criarArquivo();
@@ -64,14 +67,15 @@ public class ThreadMeiaNoite extends Thread {
                         }
 
                     }
+                        System.out.println("fechou a thread");
                 }
 
-            } catch (Exception e) {
+            } catch (InterruptedException | NumberFormatException e) {
 
                 //criar log aqui
-                System.out.println("Erro ao criar thread  ;" + e.getMessage());
+                Metodos.menssageErro(e);
             }
         }
 
-    }    
+    }   
 }

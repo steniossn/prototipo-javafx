@@ -48,7 +48,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import util.ThreadMeiaNoite;
-import util.Variaveis;
+import util.Metodos;
 
 /**
  *
@@ -164,11 +164,13 @@ public class FXMLPrincipal implements Initializable {
     //usado no botão < e > para aumentar ou diminuir o valor de casa
     int numeroCasa = 0;
     int idServico = 0;
+    
+    ThreadMeiaNoite t;
 
     // essa instancia para ser usada em outra classe 
     public static FXMLPrincipal RAIZ;
 
-    Path caminho = Paths.get(Variaveis.PASTAPRINCIPAL + "/Recados.txt"); //CAMIMNHO
+    Path caminho = Paths.get(Metodos.PASTAPRINCIPAL + "/Recados.txt"); //CAMIMNHO
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -177,13 +179,13 @@ public class FXMLPrincipal implements Initializable {
         RAIZ = FXMLPrincipal.this;        
         
         // TODO
-        Variaveis.CriarPastas();
+        Metodos.CriarPastas();
         criarArquivo();
 
         //thread que vai verificar o horario para chamar o metodo meia noite
-        ThreadMeiaNoite t = new ThreadMeiaNoite();
+        t = new ThreadMeiaNoite();
         t.start();
-
+  
         //****************************tab moradores******************************
         tabMoradores.setOnSelectionChanged((event) -> {
             preencherJCombobox();
@@ -305,7 +307,7 @@ public class FXMLPrincipal implements Initializable {
                 LerRecados();
             }
             if (!tabRecados.isSelected()) {
-                Recados();
+                exibirRecados();
             }
 
         });
@@ -314,13 +316,13 @@ public class FXMLPrincipal implements Initializable {
         //*******************Relatorios******************************************
         tabRelatorios.setOnSelectionChanged((event) -> {
             //colocar data atual
-            dataRelatorio.setText(Variaveis.mudaDatas(Variaveis.DataHora("data")).replace(".", "/"));
+            dataRelatorio.setText(Metodos.mudaDatas(Metodos.DataHora("data")).replace(".", "/"));
 
             //gerar o arquivo do relatorio atual
             criarArquivo();
 
             //coloca o texto na area de texto
-            taRelatorio.setText(Variaveis.lerString("Relatorio/" + Variaveis.mudaDatas(Variaveis.DataHora("data")) + ".txt"));
+            taRelatorio.setText(Metodos.lerString("Relatorio/" + Metodos.mudaDatas(Metodos.DataHora("data")) + ".txt"));
 
         });
         
@@ -335,7 +337,7 @@ public class FXMLPrincipal implements Initializable {
         numeroCasa++;
         try {
             //usado para fazer o numero reiniciar toda vez que chega a ultima casa
-            if (numeroCasa > Files.list(Variaveis.CASAS).count()) {
+            if (numeroCasa > Files.list(Metodos.CASAS).count()) {
                 numeroCasa = 0;
             }
         } catch (IOException ex) {
@@ -375,7 +377,7 @@ public class FXMLPrincipal implements Initializable {
         String valor = tfCasaM.getText();
         if (valor.equals("0")) {
             limpar();
-        } else if (Variaveis.lerString("Casas/casa" + valor + ".txt") == null) {
+        } else if (Metodos.lerString("Casas/casa" + valor + ".txt") == null) {
             tfCasaM.setText("0");
             limpar();
         } else {
@@ -385,7 +387,7 @@ public class FXMLPrincipal implements Initializable {
     }
 
     /**
-     * metodo usado no metodo editar para adicionar arquivos com os dados
+     * metodo usado no metodo editarCasa para adicionar arquivos com os dados
      *
      * @param arquivo nome do arquivo
      * @param path pasta de arquivos
@@ -440,7 +442,7 @@ public class FXMLPrincipal implements Initializable {
      * edita os arquivos de texto
      */
     @FXML
-    public void editar() {
+    public void editarCasa() {
         String perg2;
         String pegarNumeroCasa = tfCasaM.getText();
         //verifica se os campos não estão vazios
@@ -449,8 +451,8 @@ public class FXMLPrincipal implements Initializable {
             if (perg1 == 0) {
                 String arquivo = "casa" + pegarNumeroCasa + ".txt";
                 //essas duas proximas strings foram feitas pq o metodo pede dois paths e os paths de variaveis reference apenas a pasta e não ao arquivo
-                String pastaCasa = Variaveis.CASAS + FileSystems.getDefault().getSeparator() + arquivo;
-                String pastaDadosApp = Variaveis.PASTADADOSAPP + FileSystems.getDefault().getSeparator() + "casa_" + pegarNumeroCasa;
+                String pastaCasa = Metodos.CASAS + FileSystems.getDefault().getSeparator() + arquivo;
+                String pastaDadosApp = Metodos.PASTADADOSAPP + FileSystems.getDefault().getSeparator() + "casa_" + pegarNumeroCasa;
 
                 //aqui é escrito um novo aquivo 
                 salvarArquivo(Paths.get(pastaCasa), Paths.get(pastaDadosApp));
@@ -462,7 +464,7 @@ public class FXMLPrincipal implements Initializable {
     }
 
     //usado para colocar o foco na TextField que contem a pesquisa
-    public void focar(int index) {
+    public void mudarFoco(int index) {
         switch (index) {
             case 1:
                 tfCasaM.requestFocus();
@@ -533,7 +535,7 @@ public class FXMLPrincipal implements Initializable {
 
                 //verifica os arquivos para ver quais tem o digitado n campoPesquisa
                 if (!campoPesquisar.isEmpty()
-                        && Variaveis.lerString("Casas/" + casa + ".txt")
+                        && Metodos.lerString("Casas/" + casa + ".txt")
                                 .contains(campoPesquisar)) {
 
                     array.add(casa);
@@ -541,7 +543,7 @@ public class FXMLPrincipal implements Initializable {
                     n2 = n1;
                 }
 
-                if (n1 == Files.list(Variaveis.CASAS).count()) {
+                if (n1 == Files.list(Metodos.CASAS).count()) {
                     terminar = true;
                 }
             } while (!terminar);
@@ -560,7 +562,7 @@ public class FXMLPrincipal implements Initializable {
                     }
                     if (resposta.matches("\\d{1,2}")) {
                         if (array.contains("casa" + resposta)) {
-                            Scanner sc = new Scanner(Variaveis.lerString("Casas/casa" + resposta + ".txt"));
+                            Scanner sc = new Scanner(Metodos.lerString("Casas/casa" + resposta + ".txt"));
                             int controle = 0;
 
                             //***verifica a posição que a palavra pesquisada esta no arquivo  
@@ -578,7 +580,7 @@ public class FXMLPrincipal implements Initializable {
                             addMostrar(criarSplit("casa" + resposta));
                             tfCasaM.setText(resposta);
                             numeroCasa = Integer.parseInt(resposta);
-                            focar(local);
+                            mudarFoco(local);
                             sair = false;
                         } else {
                             JOptionPane.showMessageDialog(null, "o numero informado não corresponde as casas que contem sua busca");
@@ -590,7 +592,7 @@ public class FXMLPrincipal implements Initializable {
             } else if (array.size() == 1) {
 
                 //faz leitura do arquivo 
-                Scanner sc = new Scanner(Variaveis.lerString("Casas/" + array.get(0) + ".txt"));
+                Scanner sc = new Scanner(Metodos.lerString("Casas/" + array.get(0) + ".txt"));
                 int controle = 0;
                 //***verifica a posição que a palavra pesquisada esta no arquivo  
                 do {
@@ -607,7 +609,7 @@ public class FXMLPrincipal implements Initializable {
                 addMostrar(criarSplit(array.get(0)));
                 tfCasaM.setText(Integer.toString(n2));
                 numeroCasa = n2;
-                focar(local);
+                mudarFoco(local);
 
             } else if (array.isEmpty() && !tfCasaM.getText().equals("0")) {
                 JOptionPane.showMessageDialog(null, "arquivo não encontrado");
@@ -656,7 +658,7 @@ public class FXMLPrincipal implements Initializable {
     //edita o arquivo de relatorio add o horario de saida 
     public void addSaida() {
         //retorna arquivo inteiro 
-        Scanner sc = new Scanner(Variaveis.lerString("Relatorio/" + Variaveis.mudaDatas(Variaveis.DataHora("data")) + ".txt"));
+        Scanner sc = new Scanner(Metodos.lerString("Relatorio/" + Metodos.mudaDatas(Metodos.DataHora("data")) + ".txt"));
         // recebe uma array contendo todos os dados do visitante 
         ArrayList visitanteTodos = new ArrayList();
         //recebe as linhas q formam os dados do visitante 
@@ -715,7 +717,7 @@ public class FXMLPrincipal implements Initializable {
                     if (visitanteEmLeitura[0].equals(jb[0]) && visitanteEmLeitura[1].equals(jb[1]) && visitanteEmLeitura[2].equals(jb[2])
                             && visitanteEmLeitura[4].equals(" Saida:")) {
 
-                        String saida = "Saida: " + Variaveis.DataHora("hora");
+                        String saida = "Saida: " + Metodos.DataHora("hora");
                         arraySplit.remove(n5);
                         arraySplit.add(n5, saida);
 
@@ -728,7 +730,7 @@ public class FXMLPrincipal implements Initializable {
                         }
 
                         try {
-                            Files.write(Variaveis.relatorio(), arraySplit, Charset.defaultCharset());
+                            Files.write(Metodos.relatorio(), arraySplit, Charset.defaultCharset());
                             preencherJCombobox();
                             break;
 
@@ -744,7 +746,7 @@ public class FXMLPrincipal implements Initializable {
     //edita o arquivo de relatorio add o horario de saida informado pelo usuario
     public void addSaida(String horaSaida) {
         //retorna arquivo inteiro 
-        Scanner sc = new Scanner(Variaveis.lerString("Relatorio/" + Variaveis.mudaDatas(Variaveis.DataHora("data")) + ".txt"));
+        Scanner sc = new Scanner(Metodos.lerString("Relatorio/" + Metodos.mudaDatas(Metodos.DataHora("data")) + ".txt"));
         // recebe uma array contendo todos os dados do visitante 
         ArrayList visitanteTodos = new ArrayList();
         //recebe as linhas q formam os dados do visitante 
@@ -816,7 +818,7 @@ public class FXMLPrincipal implements Initializable {
                         }
 
                         try {
-                            Files.write(Variaveis.relatorio(), arraySplit, Charset.defaultCharset());
+                            Files.write(Metodos.relatorio(), arraySplit, Charset.defaultCharset());
                             preencherJCombobox();
                             break;
 
@@ -834,25 +836,25 @@ public class FXMLPrincipal implements Initializable {
     }
 
     //usado para fazer leitura do arquivo do dia anterior apos mudar a data a meia noite 
-    public ArrayList<String> meiaNoite() {
+    public ArrayList<String> criarMeiaNoite() {
         //ler arquivo do dia anterior, verificar se falta add saida e add ao arquivo do dia atual
-        String[] lbl = Variaveis.DataHora("data").split("/");
+        String[] lbl = Metodos.DataHora("data").split("/");
         int d = Integer.parseInt(lbl[0]);
         int m = Integer.parseInt(lbl[1]);
         int a = Integer.parseInt(lbl[2]);
 
         StringBuilder dataAnterior = new StringBuilder();
-        if (d > 1 && d <= Variaveis.verificaMes(m).length(false)) {
+        if (d > 1 && d <= Metodos.verificaMes(m).length(false)) {
             dataAnterior = dataAnterior.append(d - 1).append(".").append(m).append(".").append(a);
         } else if (d == 1) {
             if (m > 1 && m <= 12) {
                 m--;
-                dataAnterior = dataAnterior.append(d = Variaveis.verificaMes(m).length(false)).append(".").append(m).append(".").append(a);
+                dataAnterior = dataAnterior.append(d = Metodos.verificaMes(m).length(false)).append(".").append(m).append(".").append(a);
             } else if (m == 1 && d == 1) {
                 dataAnterior = dataAnterior.append(d = 31).append(".").append(m = 12).append(".").append(a - 1);
             }
         }
-        // Path relatorioF = Paths.get(Variaveis.pastaDados + FileSystems.getDefault().getSeparator() + dataAnterior + ".txt");
+        // Path relatorioF = Paths.get(Metodos.pastaDados + FileSystems.getDefault().getSeparator() + dataAnterior + ".txt");
 
         String casa = null;
         String nome = null;
@@ -866,7 +868,7 @@ public class FXMLPrincipal implements Initializable {
         ArrayList<String> visitaOntem = new ArrayList();
 
         String diaDeEntrada = new String(dataAnterior);
-        String arquivo = Variaveis.lerString("Relatorio/" + dataAnterior + ".txt");
+        String arquivo = Metodos.lerString("Relatorio/" + dataAnterior + ".txt");
 
         //ler arquivo linha por linha
         if (arquivo != null) {
@@ -933,8 +935,8 @@ public class FXMLPrincipal implements Initializable {
 
         //limpara a lista para não duplicar entradas
         // cbVisitantesM.getItems().removeAll(visitantes);
-        String data = Variaveis.mudaDatas(Variaveis.DataHora("data"));
-        String arquivo = Variaveis.lerString("Relatorio/" + data + ".txt");
+        String data = Metodos.mudaDatas(Metodos.DataHora("data"));
+        String arquivo = Metodos.lerString("Relatorio/" + data + ".txt");
 
         //ler arquivo linha por linha
         if (arquivo != null) {
@@ -996,7 +998,7 @@ public class FXMLPrincipal implements Initializable {
      * @return retorna um array de String com as informaçoes lidas no arquivo
      */
     public String[] criarSplit(String arquivo) {
-        String[] split = Variaveis.lerString("Casas/" + arquivo + ".txt").split(";"); // CRIA UM ARRAY DE STRING USANDO O ; PARA DIVIDIR AS STRINGS 
+        String[] split = Metodos.lerString("Casas/" + arquivo + ".txt").split(";"); // CRIA UM ARRAY DE STRING USANDO O ; PARA DIVIDIR AS STRINGS 
         return split;
 
     }
@@ -1035,7 +1037,7 @@ public class FXMLPrincipal implements Initializable {
 
 //***************************tab recados ***********************************
     //escreve em um arquivo txt na pasta condominio/dados/recados.txt
-    private void Recados() {
+    private void exibirRecados() {
         try {
             //pega o texto de JTAreaRecados
             byte[] bytestxt = taRecados.getText().getBytes(Charset.defaultCharset());
@@ -1074,10 +1076,10 @@ public class FXMLPrincipal implements Initializable {
     //criar arquivo do relatorio que recebe as entradas
     public void criarArquivo() {
         try {
-            if (Files.notExists(Variaveis.relatorio())) {
-                Files.createFile(Variaveis.relatorio());
-                if (meiaNoite() != null) {
-                    Files.write(Variaveis.relatorio(), meiaNoite(), Charset.defaultCharset());
+            if (Files.notExists(Metodos.relatorio())) {
+                Files.createFile(Metodos.relatorio());
+                if (criarMeiaNoite() != null) {
+                    Files.write(Metodos.relatorio(), criarMeiaNoite(), Charset.defaultCharset());
                     preencherJCombobox();
                 } else {
                     preencherJCombobox();
@@ -1093,17 +1095,17 @@ public class FXMLPrincipal implements Initializable {
     @FXML
     public void pesquisarVisita() {
         try {
-            int numeroDeArquivos = (int) Files.list(Variaveis.PASTARELATORIO).count();
+            int numeroDeArquivos = (int) Files.list(Metodos.PASTARELATORIO).count();
             ArrayList arquivosRelatorio = new ArrayList();
             int index = 0;
             while (numeroDeArquivos != 0) {
                 numeroDeArquivos--;
-                Object[] toArray = Files.list(Variaveis.PASTARELATORIO).toArray();
+                Object[] toArray = Files.list(Metodos.PASTARELATORIO).toArray();
                 Object name = toArray[index];
                 index++;
                 Path arquivo = Paths.get(name.toString());
 
-                if (Variaveis.lerString("Relatorio/" + arquivo.getFileName()).contains(pesquisarRelatorio.getText())) {
+                if (Metodos.lerString("Relatorio/" + arquivo.getFileName()).contains(pesquisarRelatorio.getText())) {
                     arquivosRelatorio.add(arquivo.getFileName().toString().replace(".txt", ""));
                 }
 
@@ -1124,7 +1126,7 @@ public class FXMLPrincipal implements Initializable {
                         JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION,
                         null, options, null);
                 if (option == 0) {
-                    taRelatorio.setText(Variaveis.lerString("Relatorio/" + jcombo.getSelectedItem().toString() + ".txt"));
+                    taRelatorio.setText(Metodos.lerString("Relatorio/" + jcombo.getSelectedItem().toString() + ".txt"));
                     dataRelatorio.setText(jcombo.getSelectedItem().toString().replace(".", "/"));
                 }
             } else {
@@ -1160,20 +1162,20 @@ public class FXMLPrincipal implements Initializable {
 
         btAvancar.setVisible(true);
 
-        if (d > 1 && d <= Variaveis.verificaMes(m).length(false)) {
+        if (d > 1 && d <= Metodos.verificaMes(m).length(false)) {
             dataAnterior.append(d - 1).append("/").append(m).append("/").append(a);
             dataRelatorio.setText(dataAnterior.toString());
-            taRelatorio.setText(Variaveis.lerString("Relatorio/" + dataAnterior.toString().replace("/", ".") + ".txt"));
+            taRelatorio.setText(Metodos.lerString("Relatorio/" + dataAnterior.toString().replace("/", ".") + ".txt"));
         } else if (d == 1) {
             if (m > 1 && m <= 12) {
                 m--;
-                dataAnterior.append(d = Variaveis.verificaMes(m).length(false)).append("/").append(m).append("/").append(a);
+                dataAnterior.append(d = Metodos.verificaMes(m).length(false)).append("/").append(m).append("/").append(a);
                 dataRelatorio.setText(dataAnterior.toString());
-                taRelatorio.setText(Variaveis.lerString("Relatorio/" + dataAnterior.toString().replace("/", ".") + ".txt"));
+                taRelatorio.setText(Metodos.lerString("Relatorio/" + dataAnterior.toString().replace("/", ".") + ".txt"));
             } else if (m == 1 && d == 1) {
                 dataAnterior.append(d = 31).append("/").append(m = 12).append("/").append(a - 1);
                 dataRelatorio.setText(dataAnterior.toString());
-                taRelatorio.setText(Variaveis.lerString("Relatorio/" + dataAnterior.toString().replace("/", ".") + ".txt"));
+                taRelatorio.setText(Metodos.lerString("Relatorio/" + dataAnterior.toString().replace("/", ".") + ".txt"));
             }
         }
     }
@@ -1192,23 +1194,23 @@ public class FXMLPrincipal implements Initializable {
         StringBuilder dataProxima = new StringBuilder();
 
         //se a data atual do sistema não for igual a stringlblData
-        if (!Variaveis.mudaDatas(Variaveis.DataHora("data")).equals(stringlblData)) {
+        if (!Metodos.mudaDatas(Metodos.DataHora("data")).equals(stringlblData)) {
             //se dia for maior ou igual a 1 e se for menor que o tamanho do mes
-            if (d >= 1 && d < Variaveis.verificaMes(m).length(false)) {
+            if (d >= 1 && d < Metodos.verificaMes(m).length(false)) {
                 dataProxima.append(d + 1).append("/").append(m).append("/").append(a);
                 dataRelatorio.setText(dataProxima.toString());
-                taRelatorio.setText(Variaveis.lerString("Relatorio/" + dataProxima.toString().replace("/", ".") + ".txt"));
+                taRelatorio.setText(Metodos.lerString("Relatorio/" + dataProxima.toString().replace("/", ".") + ".txt"));
 
                 //se dia = tamanho do mes 
-            } else if (d == Variaveis.verificaMes(m).length(false)) {
+            } else if (d == Metodos.verificaMes(m).length(false)) {
                 if (m < 12) {
                     dataProxima.append(d = 1).append("/").append(m + 1).append("/").append(a);
                     dataRelatorio.setText(dataProxima.toString());
-                    taRelatorio.setText(Variaveis.lerString("Relatorio/" + dataProxima.toString().replace("/", ".") + ".txt"));
-                } else if (m == 12 && d == Variaveis.verificaMes(m).length(false)) {
+                    taRelatorio.setText(Metodos.lerString("Relatorio/" + dataProxima.toString().replace("/", ".") + ".txt"));
+                } else if (m == 12 && d == Metodos.verificaMes(m).length(false)) {
                     dataProxima.append(d = 1).append("/").append(m = 1).append("/").append(a + 1);
                     dataRelatorio.setText(dataProxima.toString());
-                    taRelatorio.setText(Variaveis.lerString("Relatorio/" + dataProxima.toString().replace("/", ".") + ".txt"));
+                    taRelatorio.setText(Metodos.lerString("Relatorio/" + dataProxima.toString().replace("/", ".") + ".txt"));
                 }
             }
         } else {
@@ -1226,16 +1228,16 @@ public class FXMLPrincipal implements Initializable {
             if (dataResposta != null) {
 
                 if (validaData(dataResposta)) {
-                    dataRelatorio.setText(Variaveis.mudaDatas(dataResposta).replace(".", "/"));
-                    taRelatorio.setText(Variaveis.lerString("Relatorio/" + Variaveis.mudaDatas(dataResposta) + ".txt"));
-                    if (!Variaveis.DataHora("data").equals(Variaveis.mudaDatas(dataResposta))) {
+                    dataRelatorio.setText(Metodos.mudaDatas(dataResposta).replace(".", "/"));
+                    taRelatorio.setText(Metodos.lerString("Relatorio/" + Metodos.mudaDatas(dataResposta) + ".txt"));
+                    if (!Metodos.DataHora("data").equals(Metodos.mudaDatas(dataResposta))) {
                         btAvancar.setVisible(true);
                     } else {
                         btAvancar.setVisible(false);
                     }
                     controle = false;
                 } else {
-                    JOptionPane.showMessageDialog(null, "informe uma data ex: " + Variaveis.DataHora("data"));
+                    JOptionPane.showMessageDialog(null, "informe uma data ex: " + Metodos.DataHora("data"));
                 }
 
             } else {
@@ -1253,7 +1255,7 @@ public class FXMLPrincipal implements Initializable {
         idServico++;
         try {
             //usado para fazer o numero reiniciar toda vez que chega a ultima casa
-            if (idServico > Files.list(Variaveis.SERVICOS).count()) {
+            if (idServico > Files.list(Metodos.SERVICOS).count()) {
                 idServico = 0;
                 LimparServicos();
             }
@@ -1284,7 +1286,7 @@ public class FXMLPrincipal implements Initializable {
         String valor = tfIdS.getText();
         if (valor.equals("0")) {
             limpar();
-        } else if (Variaveis.lerString("Servicos/servicos" + valor + ".txt") == null) {
+        } else if (Metodos.lerString("Servicos/servicos" + valor + ".txt") == null) {
             tfIdS.setText("0");
             LimparServicos();
         } else {
@@ -1323,7 +1325,7 @@ public class FXMLPrincipal implements Initializable {
      * @return retorna um array de String com as informaçoes lidas no arquivo
      */
     public String[] lerSplit(String arquivo) {
-        String[] split = Variaveis.lerString("Servicos/" + arquivo + ".txt").split(";"); // CRIA UM ARRAY DE STRING USANDO O ; PARA DIVIDIR AS STRINGS 
+        String[] split = Metodos.lerString("Servicos/" + arquivo + ".txt").split(";"); // CRIA UM ARRAY DE STRING USANDO O ; PARA DIVIDIR AS STRINGS 
         return split;
 
     }
@@ -1355,11 +1357,11 @@ public class FXMLPrincipal implements Initializable {
         do {
             n1++;
             String servicos = "servicos" + Integer.toString(n1) + ".txt";
-            if (Files.exists(Paths.get(Variaveis.SERVICOS
+            if (Files.exists(Paths.get(Metodos.SERVICOS
                     + FileSystems.getDefault().getSeparator()
                     + servicos))) {
 
-                if (Variaveis.lerString("Servicos/" + servicos)
+                if (Metodos.lerString("Servicos/" + servicos)
                         .contains(tfPesquisarS.getText()
                                 .trim()) && tfIdS.getText()
                                 .equals("") | tfIdS.getText()
@@ -1390,15 +1392,15 @@ public class FXMLPrincipal implements Initializable {
     }
 
     /**
-     * metodo usado no metodo editar para adicionar arrays com os dados
+     * metodo usado no metodo editarCasa para adicionar arrays com os dados
      *
      * @param servico corresponde ao nome de cada casa e deve ser usado no
-     * metodo editar com o nome de cada casa
+ metodo editarCasa com o nome de cada casa
      */
     public void gerarArquivoServico(String servico) {
 
         try {
-            Path path = Paths.get(Variaveis.SERVICOS + FileSystems.getDefault().getSeparator() + servico + ".txt");
+            Path path = Paths.get(Metodos.SERVICOS + FileSystems.getDefault().getSeparator() + servico + ".txt");
 
             ArrayList<String> arc1 = new ArrayList<>();
             arc1.add(tfIdS.getText() + ";");
@@ -1422,7 +1424,7 @@ public class FXMLPrincipal implements Initializable {
      * edita os arquivos de texto
      */
     @FXML
-    public void Editar() {
+    public void editarServico() {
         String perg2;
 
         int perg1 = JOptionPane.showConfirmDialog(null, "Continuar vai alterar os dados! quer continuar?");
@@ -1443,7 +1445,7 @@ public class FXMLPrincipal implements Initializable {
         try {
 
             //local do arquivo
-            String arquivo = Variaveis.SERVICOS + FileSystems.getDefault().getSeparator() + "servicos" + tfIdS.getText() + ".txt";
+            String arquivo = Metodos.SERVICOS + FileSystems.getDefault().getSeparator() + "servicos" + tfIdS.getText() + ".txt";
 
             int pergunta = JOptionPane.showConfirmDialog(null, "quer realmente excluir os dados?");
             if (pergunta == 0) {
@@ -1456,9 +1458,9 @@ public class FXMLPrincipal implements Initializable {
                 // mudar o nome dos arquivos e o numero de referencia dentro do arquivo 
                 do {
                     //gera um nome em cada entrada no loop
-                    String arquivoServico = Variaveis.SERVICOS + FileSystems.getDefault().getSeparator() + "servicos" + (n + 1) + ".txt";
+                    String arquivoServico = Metodos.SERVICOS + FileSystems.getDefault().getSeparator() + "servicos" + (n + 1) + ".txt";
                     //lista quantos arquivos tem na pasta
-                    Object[] toArray = Files.list(Variaveis.SERVICOS).toArray();
+                    Object[] toArray = Files.list(Metodos.SERVICOS).toArray();
                     //renomeia o arquivo existente com o nome gerado no arquivoServico 
                     new File(toArray[n].toString()).renameTo(new File(arquivoServico));
                     //muda o numero dentro do arquivo
@@ -1482,7 +1484,7 @@ public class FXMLPrincipal implements Initializable {
                     n++;
 
                     //falta renomear o id dentro do arquivo 
-                } while (n < Files.list(Variaveis.SERVICOS).count());
+                } while (n < Files.list(Metodos.SERVICOS).count());
 
                 JOptionPane.showMessageDialog(null, "Alteraçoes realizadas.");
 

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package util;
 
 import java.awt.Image;
@@ -15,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.time.Month;
+import java.util.Arrays;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
 
@@ -22,7 +18,7 @@ import javax.swing.JOptionPane;
  *
  * @author portaria
  */
-public class Variaveis {
+public class Metodos {
 
     //Paths 
     //usar essa para testes 
@@ -33,7 +29,8 @@ public class Variaveis {
     public static Path CASAS = Paths.get(PASTAPRINCIPAL + "/Casas/" + FileSystems.getDefault().getSeparator());
     public static Path SERVICOS = Paths.get(PASTAPRINCIPAL + "/Servicos/" + FileSystems.getDefault().getSeparator());
     
-    public static Calendar c1 = Calendar.getInstance() ;
+    public static Calendar CALENDARIO = Calendar.getInstance() ;
+    public static DateFormat DATAFORMAT = DateFormat.getDateInstance();
 
     public static String RecuperaRaiz() {
 
@@ -88,19 +85,20 @@ public class Variaveis {
 
     }
 
+    /**
+     *
+     * @param string
+     * @return hora completa /data / hora / minutos 
+     */
     public static String DataHora(String string) {        
-        //instancia de data
-        DateFormat formataData = DateFormat.getDateInstance();
         //gera string com a data
-        String data = formataData.format(c1.getTime());
-        //instancia de hora
-        DateFormat formathora = DateFormat.getTimeInstance();
+        String data = DATAFORMAT.format(CALENDARIO.getTime());       
         //string com a hora
-        String hora = formathora.format(c1.getTime());
+        String hora = DATAFORMAT.format(CALENDARIO.getTime());
         // inteiro de hora
-        int apenasHora = c1.get(Calendar.HOUR_OF_DAY);
+        int apenasHora = CALENDARIO.get(Calendar.HOUR_OF_DAY);
         // inteiro de minutos
-        int minutos = c1.get(Calendar.MINUTE);
+        int minutos = CALENDARIO.get(Calendar.MINUTE);
 
         switch (string) {
             case "hora":
@@ -173,9 +171,14 @@ public class Variaveis {
     }
 
     public static Image iconPadrao() {
-        URL url = Variaveis.class.getResource("/imagens/icon/casa.png");
+        URL url = Metodos.class.getResource("/imagens/icon/casa.png");
         Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);
         return iconeTitulo;
+    }
+    
+    public static void menssageErro(Exception e) {
+        System.out.println("mensagem do erro; "+e.getMessage());
+        System.out.println("local do erro; " +Arrays.toString(e.getStackTrace()));
     }
  
 }

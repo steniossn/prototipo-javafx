@@ -39,10 +39,12 @@ public class CondominioFx extends Application {
     
     @Override
     public void stop() throws Exception{
-         //parar thread
-         ThreadMeiaNoite.EXECUTAR = false;
-         ThreadMeiaNoite.currentThread().interrupt();
-         System.out.println("stop foi usado ;" + ThreadMeiaNoite.currentThread().isAlive());
+         
+        //ThreadMeiaNoite.currentThread().notifyAll();
+        ThreadMeiaNoite.EXECUTAR = false;
+        
+         
+         System.out.println("stop foi usado ; " + ThreadMeiaNoite.currentThread().isAlive());
          super.stop();
     }
     
