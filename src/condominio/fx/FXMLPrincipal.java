@@ -146,7 +146,7 @@ public class FXMLPrincipal implements Initializable {
 
     //elementos do tab relatorio    
     @FXML
-    private Tab tabRelatorios;
+    private Tab tabEntradaSaida;
     @FXML
     private Label dataRelatorio;
     @FXML
@@ -164,8 +164,8 @@ public class FXMLPrincipal implements Initializable {
     //usado no botão < e > para aumentar ou diminuir o valor de casa
     int numeroCasa = 0;
     int idServico = 0;
-    
-    ThreadMeiaNoite t;
+
+    public static ThreadMeiaNoite t;
 
     // essa instancia para ser usada em outra classe 
     public static FXMLPrincipal RAIZ;
@@ -175,18 +175,25 @@ public class FXMLPrincipal implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-                //criar atalho para o objeto, usar em outra classe
-        RAIZ = FXMLPrincipal.this;        
-        
+        //criar atalho para o objeto, usar em outra classe
+        RAIZ = FXMLPrincipal.this;
+
         // TODO
         Metodos.CriarPastas();
-        criarArquivo();
+        criarArquivoEntradaSaida();
 
         //thread que vai verificar o horario para chamar o metodo meia noite
-        t = new ThreadMeiaNoite();
-        t.start();
-  
-        //****************************tab moradores******************************
+        t = new ThreadMeiaNoite("criarArquivoEntradaSaida");
+        
+
+        configurarTabMoradores();
+        configurarTabRecados();
+        configurarTabEntradaSaida();
+
+    }
+
+//********************tab moradores*****************************************
+    public void configurarTabMoradores() {
         tabMoradores.setOnSelectionChanged((event) -> {
             preencherJCombobox();
         });
@@ -214,7 +221,7 @@ public class FXMLPrincipal implements Initializable {
 
         btSaidaM.setOnMouseClicked((MouseEvent event) -> {
             //verificar se existe um arquivo com os dados 
-            criarArquivo();
+            criarArquivoEntradaSaida();
             Icon icoLeft = new ImageIcon(getClass().getResource("/imagens/icon/mouse_esquerdo.png"));
             Icon icoRigh = new ImageIcon(getClass().getResource("/imagens/icon/mouse_direito.png"));
 
@@ -267,7 +274,7 @@ public class FXMLPrincipal implements Initializable {
             try {
 
                 //criar o arquivo caso não exista
-                criarArquivo();
+                criarArquivoEntradaSaida();
 
                 //cria o painel principal
                 Stage s1 = new Stage();
@@ -299,8 +306,9 @@ public class FXMLPrincipal implements Initializable {
         //colocar no combobox as entradas se houver
         preencherJCombobox();
 
-        //*******************fim moradores**************************************
-        //******************tab recados****************************************
+    }
+
+    public void configurarTabRecados() {
         tabRecados.setOnSelectionChanged((event) -> {
 
             if (tabRecados.isSelected()) {
@@ -311,27 +319,22 @@ public class FXMLPrincipal implements Initializable {
             }
 
         });
-        //******************fim tab recados**************************************
+    }
 
-        //*******************Relatorios******************************************
-        tabRelatorios.setOnSelectionChanged((event) -> {
+    public void configurarTabEntradaSaida() {
+        tabEntradaSaida.setOnSelectionChanged((event) -> {
             //colocar data atual
             dataRelatorio.setText(Metodos.mudaDatas(Metodos.DataHora("data")).replace(".", "/"));
 
             //gerar o arquivo do relatorio atual
-            criarArquivo();
+            criarArquivoEntradaSaida();
 
             //coloca o texto na area de texto
             taRelatorio.setText(Metodos.lerString("Relatorio/" + Metodos.mudaDatas(Metodos.DataHora("data")) + ".txt"));
 
         });
-        
-        
-
     }
 
-
-//********************tab moradores*****************************************
     @FXML
     public void btAvancarMoradores() {
         numeroCasa++;
@@ -1074,7 +1077,7 @@ public class FXMLPrincipal implements Initializable {
 //*********************** fim tab  recados *********************************
 //*********************************relatorio***********************************   
     //criar arquivo do relatorio que recebe as entradas
-    public void criarArquivo() {
+    public void criarArquivoEntradaSaida() {
         try {
             if (Files.notExists(Metodos.relatorio())) {
                 Files.createFile(Metodos.relatorio());
@@ -1395,7 +1398,7 @@ public class FXMLPrincipal implements Initializable {
      * metodo usado no metodo editarCasa para adicionar arrays com os dados
      *
      * @param servico corresponde ao nome de cada casa e deve ser usado no
- metodo editarCasa com o nome de cada casa
+     * metodo editarCasa com o nome de cada casa
      */
     public void gerarArquivoServico(String servico) {
 

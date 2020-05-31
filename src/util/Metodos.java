@@ -31,6 +31,8 @@ public class Metodos {
     
     public static Calendar CALENDARIO = Calendar.getInstance() ;
     public static DateFormat DATAFORMAT = DateFormat.getDateInstance();
+    public static DateFormat FORMATHORA = DateFormat.getTimeInstance();
+   
 
     public static String RecuperaRaiz() {
 
@@ -94,7 +96,7 @@ public class Metodos {
         //gera string com a data
         String data = DATAFORMAT.format(CALENDARIO.getTime());       
         //string com a hora
-        String hora = DATAFORMAT.format(CALENDARIO.getTime());
+        String hora = FORMATHORA.format(CALENDARIO.getTime());
         // inteiro de hora
         int apenasHora = CALENDARIO.get(Calendar.HOUR_OF_DAY);
         // inteiro de minutos

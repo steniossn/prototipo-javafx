@@ -10,7 +10,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="condominio.fx.FXMLPrincipal">
+<AnchorPane id="AnchorPane" prefHeight="780.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="condominio.fx.FXMLPrincipal">
     <children>
         <TabPane fx:id="tabPane" prefHeight="680.0" prefWidth="574.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <tabs>
@@ -404,7 +404,7 @@
                         </TextArea>
                     </content>
                 </Tab>
-                <Tab id="tabRecados" fx:id="tabRelatorios" text="Relatorio">
+                <Tab id="tabRecados" fx:id="tabEntradaSaida" text="EntradaSaida">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>

@@ -19,13 +19,20 @@ import condominio.fx.FXMLPrincipal;
 public class ThreadMeiaNoite extends Thread {
 
     public static Boolean EXECUTAR = true;
-    String nome;
+    private String nome;
     int tempo;
     Boolean controlador;
-
-    public ThreadMeiaNoite() {
-    }
     
+    public ThreadMeiaNoite(){
+    }
+
+    public ThreadMeiaNoite(String nome) {
+        this.nome = nome;
+        ThreadMeiaNoite t = new ThreadMeiaNoite();
+        t.start();
+        
+    }
+
     @Override
     public void run() {
 //criar ação da thread
@@ -41,7 +48,6 @@ public class ThreadMeiaNoite extends Thread {
 
                 int esperar = 60000;
 
-
                 if (!dataHora.equals("0")) {
                     //subtrai de 24 horas o tempo que resta para dar meia noite
                     esperar = (24 - Integer.parseInt(dataHora)) * 3600000 - minutos;
@@ -53,13 +59,13 @@ public class ThreadMeiaNoite extends Thread {
                     Thread.sleep(esperar);
                     //vai checar se existe o arquivo 
                     controlador = true;
-                    while (controlador) {
+                    while (controlador && EXECUTAR) {
                         System.out.println("thread executando..." + esperar++);
                         Thread.sleep(60000);
                         dataHora = Metodos.DataHora("apenasHora");
                         if (dataHora.equals("0")) {
                             //vai checar se existe o arquivo 
-                            FXMLPrincipal.RAIZ.criarArquivo();
+                            FXMLPrincipal.RAIZ.criarArquivoEntradaSaida();
                             //muda o tempo de pausa no primeiro loop
                             esperar = 23 * 3600000;
                             //sair desse loop
@@ -67,7 +73,7 @@ public class ThreadMeiaNoite extends Thread {
                         }
 
                     }
-                        System.out.println("fechou a thread");
+
                 }
 
             } catch (InterruptedException | NumberFormatException e) {
@@ -76,6 +82,18 @@ public class ThreadMeiaNoite extends Thread {
                 Metodos.menssageErro(e);
             }
         }
+        System.out.println("fechou a thread");
 
-    }   
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+    
+    
+    
 }
