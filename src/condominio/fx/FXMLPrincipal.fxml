@@ -372,7 +372,7 @@
                                                                 <Font size="14.0" />
                                                             </font>
                                                         </Button>
-                                                        <Button fx:id="btLimparS" mnemonicParsing="false" onAction="#LimparServicos" text="limpar">
+                                                        <Button fx:id="btLimparS" mnemonicParsing="false" onAction="#limparServicos" text="limpar">
                                                             <font>
                                                                 <Font size="14.0" />
                                                             </font>
@@ -404,7 +404,7 @@
                         </TextArea>
                     </content>
                 </Tab>
-                <Tab id="tabRecados" fx:id="tabEntradaSaida" text="EntradaSaida">
+                <Tab id="tabRecados" fx:id="tabEntradaSaida" text="Entrada/Saida">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>

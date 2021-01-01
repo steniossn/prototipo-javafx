@@ -22,19 +22,21 @@ public class Metodos {
 
     //Paths 
     //usar essa para testes 
-    public static final Path PASTAPRINCIPAL = Paths.get(RecuperaRaiz() + "CondominioFxTeste/Dados/" + FileSystems.getDefault().getSeparator());
-   // public static final Path PASTAPRINCIPAL = Paths.get(RecuperaRaiz() + "CondominioFx/Dados/" + FileSystems.getDefault().getSeparator());
+    public static final Path PASTAPRINCIPAL = Paths.get(recuperaRaiz() + "CondominioFxTeste/Dados/" + FileSystems.getDefault().getSeparator());
+    
+    
+    //public static final Path PASTAPRINCIPAL = Paths.get(recuperaRaiz() + "CondominioFx/Dados/" + FileSystems.getDefault().getSeparator());
     public static Path PASTADADOSAPP = Paths.get(PASTAPRINCIPAL + "/DadosApp/" + FileSystems.getDefault().getSeparator());
     public static Path PASTARELATORIO = Paths.get(PASTAPRINCIPAL + "/Relatorio/" + FileSystems.getDefault().getSeparator());
     public static Path CASAS = Paths.get(PASTAPRINCIPAL + "/Casas/" + FileSystems.getDefault().getSeparator());
     public static Path SERVICOS = Paths.get(PASTAPRINCIPAL + "/Servicos/" + FileSystems.getDefault().getSeparator());
     
-    public static Calendar CALENDARIO = Calendar.getInstance() ;
-    public static DateFormat DATAFORMAT = DateFormat.getDateInstance();
-    public static DateFormat FORMATHORA = DateFormat.getTimeInstance();
+    public static Calendar CALENDARIO; 
+    public static DateFormat DATAFORMAT; 
+    public static DateFormat FORMATHORA;
    
 
-    public static String RecuperaRaiz() {
+    public static String recuperaRaiz() {
 
         Iterable<Path> dirs = FileSystems.getDefault().getRootDirectories();// 
         for (Path path : dirs) { // for percorre todos os diretorios armazenados no array path
@@ -45,7 +47,7 @@ public class Metodos {
 
     //retorna o Paths de relatorio C:\Condominio\Dados\Relatorio\ + nome do arquivo
     public static Path relatorio() {
-        String[] lbl = DataHora("data").split("/");
+        String[] lbl = dataHora("data").split("/");
         int d = Integer.parseInt(lbl[0]);
         int m = Integer.parseInt(lbl[1]);
         int a = Integer.parseInt(lbl[2]);
@@ -58,7 +60,7 @@ public class Metodos {
     }
 
     //cria as pastas do programa
-    public static void CriarPastas() {
+    public static void criarPastas() {
 
         try {
 
@@ -92,8 +94,12 @@ public class Metodos {
      * @param string
      * @return hora completa /data / hora / minutos 
      */
-    public static String DataHora(String string) {        
+    public static String dataHora(String string) {        
         //gera string com a data
+        CALENDARIO = Calendar.getInstance();
+        DATAFORMAT = DateFormat.getDateInstance();
+        FORMATHORA =  DateFormat.getTimeInstance();
+        
         String data = DATAFORMAT.format(CALENDARIO.getTime());       
         //string com a hora
         String hora = FORMATHORA.format(CALENDARIO.getTime());

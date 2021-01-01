@@ -41,11 +41,8 @@ public class CondominioFx extends Application {
     public void stop() throws Exception{
          
         //ThreadMeiaNoite.currentThread().notifyAll();
-        ThreadMeiaNoite.EXECUTAR = false;
-        
-        
-         
-         System.out.println("stop foi usado ; " + FXMLPrincipal.t.getNome() + " " + FXMLPrincipal.t.getName() +" "+ FXMLPrincipal.t.isAlive()  );
+        ThreadMeiaNoite.EXECUTAR = false;        
+        ThreadMeiaNoite.currentThread().interrupt();
          super.stop();
     }
     

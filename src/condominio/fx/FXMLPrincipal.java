@@ -49,6 +49,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import util.ThreadMeiaNoite;
 import util.Metodos;
+import util.Msg;
 
 /**
  *
@@ -158,9 +159,7 @@ public class FXMLPrincipal implements Initializable {
     @FXML
     private Button btVoltar;
 
-    //add listta de visitantes, pegar de relatorio com base na id de entrada       
-    ArrayList<String> visitantes = new ArrayList();
-
+    public ArrayList<String> visitantes = new ArrayList<>();
     //usado no botão < e > para aumentar ou diminuir o valor de casa
     int numeroCasa = 0;
     int idServico = 0;
@@ -179,12 +178,13 @@ public class FXMLPrincipal implements Initializable {
         RAIZ = FXMLPrincipal.this;
 
         // TODO
-        Metodos.CriarPastas();
+        Metodos.criarPastas();
         criarArquivoEntradaSaida();
 
-        //thread que vai verificar o horario para chamar o metodo meia noite
-        t = new ThreadMeiaNoite("criarArquivoEntradaSaida");
-        
+        if (ThreadMeiaNoite.currentThread() == null) {
+            //thread que vai verificar o horario para chamar o metodo meia noite
+            ThreadMeiaNoite threadMeiaNoite = new ThreadMeiaNoite("criarArquivoEntradaSaida");
+        }
 
         configurarTabMoradores();
         configurarTabRecados();
@@ -208,13 +208,15 @@ public class FXMLPrincipal implements Initializable {
         //mostrar dados da pesquisa ao apertar enter
         tfPesquisarM.setOnKeyPressed((javafx.scene.input.KeyEvent event) -> {
             if (event.getCode() == ENTER) {
-                mostrar();
+                if (!tfPesquisarM.getText().equals("")) {
+                    mostrarMoradorPesquisar();
+                }
             }
         });
 
         btPesquisarM.setOnAction((event) -> {
             if (!tfPesquisarM.getText().equals("")) {
-                mostrar();
+                mostrarMoradorPesquisar();
             }
 
         });
@@ -229,7 +231,7 @@ public class FXMLPrincipal implements Initializable {
             switch (event.getButton()) {
                 case PRIMARY:
                     // ao clicar
-                    if (!visitaNoCondominio.equals("não há visitantes")) {
+                    if (visitaNoCondominio != null) {
                         // retorna 0 para sim 1 para não e 2 para cancelar
                         int resposta = JOptionPane.showConfirmDialog(null, "adicionar hora de saida para esse visitante, " + visitaNoCondominio + " ?", "horario do sistema", 1, JOptionPane.ERROR_MESSAGE, icoLeft);
                         if (resposta == 0) {
@@ -244,7 +246,7 @@ public class FXMLPrincipal implements Initializable {
                 case SECONDARY: {
                     // pegar hora do clique em saida mais o item da casa
 
-                    if (!visitaNoCondominio.equals("não há visitantes")) {
+                    if (visitaNoCondominio != null) {
                         // retorna 0 para sim 1 para não e 2 para cancelar
 
                         int resposta = JOptionPane.showConfirmDialog(null, "adicionar hora de saida para esse visitante, " + visitaNoCondominio + " ?", "gerar horario", 1, JOptionPane.ERROR_MESSAGE, icoRigh);
@@ -312,7 +314,7 @@ public class FXMLPrincipal implements Initializable {
         tabRecados.setOnSelectionChanged((event) -> {
 
             if (tabRecados.isSelected()) {
-                LerRecados();
+                lerRecados();
             }
             if (!tabRecados.isSelected()) {
                 exibirRecados();
@@ -324,13 +326,13 @@ public class FXMLPrincipal implements Initializable {
     public void configurarTabEntradaSaida() {
         tabEntradaSaida.setOnSelectionChanged((event) -> {
             //colocar data atual
-            dataRelatorio.setText(Metodos.mudaDatas(Metodos.DataHora("data")).replace(".", "/"));
+            dataRelatorio.setText(Metodos.mudaDatas(Metodos.dataHora("data")).replace(".", "/"));
 
             //gerar o arquivo do relatorio atual
             criarArquivoEntradaSaida();
 
             //coloca o texto na area de texto
-            taRelatorio.setText(Metodos.lerString("Relatorio/" + Metodos.mudaDatas(Metodos.DataHora("data")) + ".txt"));
+            taRelatorio.setText(Metodos.lerString("Relatorio/" + Metodos.mudaDatas(Metodos.dataHora("data")) + ".txt"));
 
         });
     }
@@ -449,7 +451,7 @@ public class FXMLPrincipal implements Initializable {
         String perg2;
         String pegarNumeroCasa = tfCasaM.getText();
         //verifica se os campos não estão vazios
-        if (!pegarNumeroCasa.equals("0")) {
+        if (!pegarNumeroCasa.equals("0") && !pegarNumeroCasa.equals("")) {
             int perg1 = JOptionPane.showConfirmDialog(null, "Continuar vai alterar os dados! quer continuar?");
             if (perg1 == 0) {
                 String arquivo = "casa" + pegarNumeroCasa + ".txt";
@@ -463,6 +465,8 @@ public class FXMLPrincipal implements Initializable {
                 JOptionPane.showMessageDialog(null, "cancelado! não foi feito alterações!");
             }
 
+        } else {
+            JOptionPane.showMessageDialog(null, "o numero da casa não pode estar vazio!");
         }
     }
 
@@ -518,7 +522,7 @@ public class FXMLPrincipal implements Initializable {
     /**
      * mostra o conteudo dos arquivos nos campos correspondentes
      */
-    public void mostrar() {
+    public void mostrarMoradorPesquisar() {
 
         int local = 1;
         try {
@@ -533,13 +537,12 @@ public class FXMLPrincipal implements Initializable {
             ArrayList<String> array = new ArrayList<>();
             do {
                 n1++;
-                String casa = "casa" + Integer.toString(n1);
+                String casa = "casa" + Integer.toString(n1);               
                 String campoPesquisar = tfPesquisarM.getText().trim();
 
                 //verifica os arquivos para ver quais tem o digitado n campoPesquisa
                 if (!campoPesquisar.isEmpty()
-                        && Metodos.lerString("Casas/" + casa + ".txt")
-                                .contains(campoPesquisar)) {
+                        && Metodos.lerString("Casas/" + casa + ".txt").contains(campoPesquisar)) {
 
                     array.add(casa);
 
@@ -661,7 +664,7 @@ public class FXMLPrincipal implements Initializable {
     //edita o arquivo de relatorio add o horario de saida 
     public void addSaida() {
         //retorna arquivo inteiro 
-        Scanner sc = new Scanner(Metodos.lerString("Relatorio/" + Metodos.mudaDatas(Metodos.DataHora("data")) + ".txt"));
+        Scanner sc = new Scanner(Metodos.lerString("Relatorio/" + Metodos.mudaDatas(Metodos.dataHora("data")) + ".txt"));
         // recebe uma array contendo todos os dados do visitante 
         ArrayList visitanteTodos = new ArrayList();
         //recebe as linhas q formam os dados do visitante 
@@ -720,7 +723,7 @@ public class FXMLPrincipal implements Initializable {
                     if (visitanteEmLeitura[0].equals(jb[0]) && visitanteEmLeitura[1].equals(jb[1]) && visitanteEmLeitura[2].equals(jb[2])
                             && visitanteEmLeitura[4].equals(" Saida:")) {
 
-                        String saida = "Saida: " + Metodos.DataHora("hora");
+                        String saida = "Saida: " + Metodos.dataHora("hora");
                         arraySplit.remove(n5);
                         arraySplit.add(n5, saida);
 
@@ -749,7 +752,7 @@ public class FXMLPrincipal implements Initializable {
     //edita o arquivo de relatorio add o horario de saida informado pelo usuario
     public void addSaida(String horaSaida) {
         //retorna arquivo inteiro 
-        Scanner sc = new Scanner(Metodos.lerString("Relatorio/" + Metodos.mudaDatas(Metodos.DataHora("data")) + ".txt"));
+        Scanner sc = new Scanner(Metodos.lerString("Relatorio/" + Metodos.mudaDatas(Metodos.dataHora("data")) + ".txt"));
         // recebe uma array contendo todos os dados do visitante 
         ArrayList visitanteTodos = new ArrayList();
         //recebe as linhas q formam os dados do visitante 
@@ -841,7 +844,7 @@ public class FXMLPrincipal implements Initializable {
     //usado para fazer leitura do arquivo do dia anterior apos mudar a data a meia noite 
     public ArrayList<String> criarMeiaNoite() {
         //ler arquivo do dia anterior, verificar se falta add saida e add ao arquivo do dia atual
-        String[] lbl = Metodos.DataHora("data").split("/");
+        String[] lbl = Metodos.dataHora("data").split("/");
         int d = Integer.parseInt(lbl[0]);
         int m = Integer.parseInt(lbl[1]);
         int a = Integer.parseInt(lbl[2]);
@@ -927,7 +930,9 @@ public class FXMLPrincipal implements Initializable {
     /**
      * add os itens de jCombobox
      */
-    public final void preencherJCombobox() {
+    public void preencherJCombobox() {
+        //add listta de visitantes, pegar de relatorio com base na id de entrada       
+
         String casa = null;
         String nome = null;
         String entrada = null;
@@ -938,7 +943,7 @@ public class FXMLPrincipal implements Initializable {
 
         //limpara a lista para não duplicar entradas
         // cbVisitantesM.getItems().removeAll(visitantes);
-        String data = Metodos.mudaDatas(Metodos.DataHora("data"));
+        String data = Metodos.mudaDatas(Metodos.dataHora("data"));
         String arquivo = Metodos.lerString("Relatorio/" + data + ".txt");
 
         //ler arquivo linha por linha
@@ -977,13 +982,13 @@ public class FXMLPrincipal implements Initializable {
         }
 
         if (visitantes.isEmpty()) {
-            cbVisitantesM.setPromptText("sem entradas");
+            cbVisitantesM.setPromptText(Msg.SEM_ENTRADAS);
             cbVisitantesM.getItems().clear();
         } else {
-            cbVisitantesM.setPromptText("entradas registradas");
             cbVisitantesM.getItems().clear();
             cbVisitantesM.getItems().addAll(visitantes);
-
+            //cbVisitantesM.setPromptText(cbVisitantesM.getItems().get(0));
+            cbVisitantesM.setPromptText("ENTRADA REGISTRADA");
 //            int n = -1;
 //            do {
 //                n++;
@@ -995,7 +1000,8 @@ public class FXMLPrincipal implements Initializable {
     }
 
     /**
-     * faz a leitura do arquivo esse metodo é usado no metodo mostrar
+     * faz a leitura do arquivo esse metodo é usado no metodo
+     * mostrarMoradorPesquisar
      *
      * @param arquivo é o nome do arquivo q deve ser lido
      * @return retorna um array de String com as informaçoes lidas no arquivo
@@ -1007,9 +1013,10 @@ public class FXMLPrincipal implements Initializable {
     }
 
     /**
-     * metodo que add arrays de dados no metodo mostrar
+     * metodo que add arrays de dados no metodo mostrarMoradorPesquisar
      *
-     * @param split corresponde ao array de strings criado no medodo mostrar
+     * @param split corresponde ao array de strings criado no medodo
+     * mostrarMoradorPesquisar
      */
     public void addMostrar(String[] split) {
 
@@ -1056,7 +1063,7 @@ public class FXMLPrincipal implements Initializable {
     }
 
     //verifica se existe o arquivo e le o conteudo
-    private void LerRecados() {
+    private void lerRecados() {
         try {
             if (Files.notExists(caminho)) {
                 Files.createFile(caminho);
@@ -1197,7 +1204,7 @@ public class FXMLPrincipal implements Initializable {
         StringBuilder dataProxima = new StringBuilder();
 
         //se a data atual do sistema não for igual a stringlblData
-        if (!Metodos.mudaDatas(Metodos.DataHora("data")).equals(stringlblData)) {
+        if (!Metodos.mudaDatas(Metodos.dataHora("data")).equals(stringlblData)) {
             //se dia for maior ou igual a 1 e se for menor que o tamanho do mes
             if (d >= 1 && d < Metodos.verificaMes(m).length(false)) {
                 dataProxima.append(d + 1).append("/").append(m).append("/").append(a);
@@ -1233,14 +1240,14 @@ public class FXMLPrincipal implements Initializable {
                 if (validaData(dataResposta)) {
                     dataRelatorio.setText(Metodos.mudaDatas(dataResposta).replace(".", "/"));
                     taRelatorio.setText(Metodos.lerString("Relatorio/" + Metodos.mudaDatas(dataResposta) + ".txt"));
-                    if (!Metodos.DataHora("data").equals(Metodos.mudaDatas(dataResposta))) {
+                    if (!Metodos.dataHora("data").equals(Metodos.mudaDatas(dataResposta))) {
                         btAvancar.setVisible(true);
                     } else {
                         btAvancar.setVisible(false);
                     }
                     controle = false;
                 } else {
-                    JOptionPane.showMessageDialog(null, "informe uma data ex: " + Metodos.DataHora("data"));
+                    JOptionPane.showMessageDialog(null, "informe uma data ex: " + Metodos.dataHora("data"));
                 }
 
             } else {
@@ -1260,7 +1267,7 @@ public class FXMLPrincipal implements Initializable {
             //usado para fazer o numero reiniciar toda vez que chega a ultima casa
             if (idServico > Files.list(Metodos.SERVICOS).count()) {
                 idServico = 0;
-                LimparServicos();
+                limparServicos();
             }
         } catch (IOException ex) {
             Logger.getLogger(FXMLPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -1280,7 +1287,7 @@ public class FXMLPrincipal implements Initializable {
         } else {
             tfIdS.setText("0");
             idServico = 0;
-            LimparServicos();
+            limparServicos();
         }
     }
 
@@ -1291,7 +1298,7 @@ public class FXMLPrincipal implements Initializable {
             limpar();
         } else if (Metodos.lerString("Servicos/servicos" + valor + ".txt") == null) {
             tfIdS.setText("0");
-            LimparServicos();
+            limparServicos();
         } else {
             addMostrarServicos(lerSplit("servicos" + valor));
 
@@ -1303,12 +1310,12 @@ public class FXMLPrincipal implements Initializable {
         String digitado;
         if (!tfIdS.getText().equals("")) {
             digitado = tfPesquisarS.getText();
-            LimparServicos();
+            limparServicos();
             tfPesquisarS.setText(digitado);
-            MostrarServicos();
+            mostrarServicos();
         } else {
             if (!tfPesquisarS.getText().equals("") | !tfIdS.getText().equals("")) {
-                MostrarServicos();
+                mostrarServicos();
             }
         }
     }
@@ -1316,13 +1323,14 @@ public class FXMLPrincipal implements Initializable {
     @FXML
     public void botaoPesquisarServicos() {
         if (!tfPesquisarS.getText().equals("") | !tfPesquisarS.getText().equals("")) {
-            MostrarServicos();
+            mostrarServicos();
         }
 
     }
 
     /**
-     * faz a leitura do arquivo esse metodo é usado no metodo mostrar
+     * faz a leitura do arquivo esse metodo é usado no metodo
+     * mostrarMoradorPesquisar
      *
      * @param arquivo é o nome do arquivo q deve ser lido
      * @return retorna um array de String com as informaçoes lidas no arquivo
@@ -1334,9 +1342,10 @@ public class FXMLPrincipal implements Initializable {
     }
 
     /**
-     * metodo que add arrays de dados no metodo mostrar
+     * metodo que add arrays de dados no metodo mostrarMoradorPesquisar
      *
-     * @param split corresponde ao array de strings criado no medodo mostrar
+     * @param split corresponde ao array de strings criado no medodo
+     * mostrarMoradorPesquisar
      */
     public void addMostrarServicos(String[] split) {
         tfIdS.setText(split[0].trim());
@@ -1352,7 +1361,7 @@ public class FXMLPrincipal implements Initializable {
     /**
      * mostra o conteudo dos arquivos nos campos correspondentes
      */
-    public void MostrarServicos() {
+    public void mostrarServicos() {
         //MUDA OS CAMPOS DO APP PARA OS ENCONTRADOS NO ARQUIVO DE TEXTO
         boolean terminar = false;
         int n1 = 0;
@@ -1382,7 +1391,7 @@ public class FXMLPrincipal implements Initializable {
      * limpa todos os campos do programa
      */
     @FXML
-    public void LimparServicos() {
+    public void limparServicos() {
         tfIdS.setText("");
         tfPrestador.setText("");
         tfFixoS.setText("");
@@ -1491,7 +1500,7 @@ public class FXMLPrincipal implements Initializable {
 
                 JOptionPane.showMessageDialog(null, "Alteraçoes realizadas.");
 
-                LimparServicos();
+                limparServicos();
             } else {
 
             }

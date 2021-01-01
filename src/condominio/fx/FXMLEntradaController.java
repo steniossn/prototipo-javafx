@@ -69,14 +69,18 @@ public class FXMLEntradaController implements Initializable {
 
     /**
      * Initializes the controller class.
+     *
      * @param url
      * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+            configurar();
+    }
 
+    public void configurar() {
         //coloca hora do sistema em entrada assim que a janela é aberta
-        tfEntrada.setText(Metodos.DataHora("hora"));
+        tfEntrada.setText(Metodos.dataHora("hora"));
 
         //ao apertar enter trocar o foco 
         tfCasa.setOnAction((ActionEvent event) -> {
@@ -122,6 +126,7 @@ public class FXMLEntradaController implements Initializable {
             }
 
         });
+
     }
 
     @FXML
@@ -137,27 +142,25 @@ public class FXMLEntradaController implements Initializable {
     // ao apertar ok pegar o nome informado e acionar metodo 
     public void botaoOk() {
         Boolean salvo;
-        
+
         if (cbUber.isSelected()) {
             tfNome.setText(inicialMaiuscula(tfNome.getText()));
-            salvo = visitaDeUber();            
+            salvo = visitaDeUber();
         } else {
             tfNome.setText(inicialMaiuscula(tfNome.getText()));
             salvo = entrada();
         }
-        
-        if(salvo){
+
+        if (salvo) {
             tfCasa.requestFocus();
 
             //fechar a tela
             Stage stage = (Stage) btnOk.getScene().getWindow(); //pegar tela atual
             stage.close(); //fechar
-        }else{
+        } else {
             alerta("erro", "não foi possivel registrar os dados");
             //criar codigo que reinicie a aplicação principal
         }
-        
-
 
     }
 
@@ -179,7 +182,7 @@ public class FXMLEntradaController implements Initializable {
 
             //metodo de outra classe que carrega um combobox 
             FXMLPrincipal.RAIZ.preencherJCombobox();
-            
+
             return true;
 
         } catch (IOException ex) {
@@ -218,7 +221,7 @@ public class FXMLEntradaController implements Initializable {
             Files.write(Metodos.relatorio(), entrada, Charset.defaultCharset());
             //metodo de outra classe que carrega um combobox
             FXMLPrincipal.RAIZ.preencherJCombobox();
-            
+
             return true;
 
         } catch (IOException ex) {
