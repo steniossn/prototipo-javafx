@@ -5,6 +5,10 @@
  */
 package condominio.fx;
 
+/**
+ 
+ */
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +26,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -95,7 +100,7 @@ public class FXMLPrincipal implements Initializable {
     @FXML
     private TextArea taAnotacoesM;
     @FXML
-    private ComboBox<String> cbVisitantesM;
+    private static ComboBox<String> cbVisitantesM;
     @FXML
     private Tab tabMoradores;
     @FXML
@@ -159,23 +164,19 @@ public class FXMLPrincipal implements Initializable {
     @FXML
     private Button btVoltar;
 
-    public ArrayList<String> visitantes = new ArrayList<>();
+    public static ArrayList<String> visitantes = new ArrayList<>();
     //usado no botão < e > para aumentar ou diminuir o valor de casa
     int numeroCasa = 0;
     int idServico = 0;
 
     public static ThreadMeiaNoite t;
 
-    // essa instancia para ser usada em outra classe 
-    public static FXMLPrincipal RAIZ;
 
     Path caminho = Paths.get(Metodos.PASTAPRINCIPAL + "/Recados.txt"); //CAMIMNHO
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
-        //criar atalho para o objeto, usar em outra classe
-        RAIZ = FXMLPrincipal.this;
+  
 
         // TODO
         Metodos.criarPastas();
@@ -222,11 +223,10 @@ public class FXMLPrincipal implements Initializable {
         });
 
         btSaidaM.setOnMouseClicked((MouseEvent event) -> {
-            //verificar se existe um arquivo com os dados 
+            //verificar se existe um arquivo com os dados
             criarArquivoEntradaSaida();
-            Icon icoLeft = new ImageIcon(getClass().getResource("/imagens/icon/mouse_esquerdo.png"));
-            Icon icoRigh = new ImageIcon(getClass().getResource("/imagens/icon/mouse_direito.png"));
-
+            Icon icoLeft = new ImageIcon(FXMLPrincipal.this.getClass().getResource("/imagens/icon/mouse_esquerdo.png"));
+            Icon icoRigh = new ImageIcon(FXMLPrincipal.this.getClass().getResource("/imagens/icon/mouse_direito.png"));
             String visitaNoCondominio = cbVisitantesM.getValue();
             switch (event.getButton()) {
                 case PRIMARY:
@@ -242,13 +242,13 @@ public class FXMLPrincipal implements Initializable {
                         JOptionPane.showMessageDialog(null, "não há visitantes para registrar saida!");
                     }
                     break;
-
+                    
                 case SECONDARY: {
                     // pegar hora do clique em saida mais o item da casa
-
+                    
                     if (visitaNoCondominio != null) {
                         // retorna 0 para sim 1 para não e 2 para cancelar
-
+                        
                         int resposta = JOptionPane.showConfirmDialog(null, "adicionar hora de saida para esse visitante, " + visitaNoCondominio + " ?", "gerar horario", 1, JOptionPane.ERROR_MESSAGE, icoRigh);
                         if (resposta == 0) {
                             String respostaSaida = JOptionPane.showInputDialog("qual foi o horario de saida?");
@@ -267,9 +267,8 @@ public class FXMLPrincipal implements Initializable {
                 default:
                     JOptionPane.showMessageDialog(null, "clic botão esquerdo para adicionar horario do sistema\ne botão direito para adicionar o horario informado");
                     break;
-
+                    
             }
-
         });
 
         btEntradaM.setOnAction((ActionEvent event) -> {
@@ -842,7 +841,7 @@ public class FXMLPrincipal implements Initializable {
     }
 
     //usado para fazer leitura do arquivo do dia anterior apos mudar a data a meia noite 
-    public ArrayList<String> criarMeiaNoite() {
+    public static ArrayList<String> criarMeiaNoite() {
         //ler arquivo do dia anterior, verificar se falta add saida e add ao arquivo do dia atual
         String[] lbl = Metodos.dataHora("data").split("/");
         int d = Integer.parseInt(lbl[0]);
@@ -930,7 +929,7 @@ public class FXMLPrincipal implements Initializable {
     /**
      * add os itens de jCombobox
      */
-    public void preencherJCombobox() {
+    public static void preencherJCombobox() {
         //add listta de visitantes, pegar de relatorio com base na id de entrada       
 
         String casa = null;
@@ -1084,7 +1083,7 @@ public class FXMLPrincipal implements Initializable {
 //*********************** fim tab  recados *********************************
 //*********************************relatorio***********************************   
     //criar arquivo do relatorio que recebe as entradas
-    public void criarArquivoEntradaSaida() {
+    public static void criarArquivoEntradaSaida() {
         try {
             if (Files.notExists(Metodos.relatorio())) {
                 Files.createFile(Metodos.relatorio());
