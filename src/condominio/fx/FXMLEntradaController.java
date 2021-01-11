@@ -5,10 +5,15 @@
  */
 package condominio.fx;
 
+/**
+ * falta criar metodo para dar a saida utilizando o comboBoxSaida, deixar o nome
+ * do uber em maisculo, talvez aparecer anotação apenas se houver anotação.
+ */
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -18,7 +23,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -29,7 +36,7 @@ import util.Metodos;
  *
  * @author portaria
  */
-public class FXMLEntradaController implements Initializable {
+public class FXMLEntradaController extends FXMLPrincipal implements Initializable {
 
     @FXML
     private TextField tfEntrada;
@@ -58,6 +65,12 @@ public class FXMLEntradaController implements Initializable {
     @FXML
     private TextField tfNome;
 
+    @FXML
+    private ComboBox comboBoxSaida;
+
+    @FXML
+    private TextArea textAreaObservacao;
+
     //***************variaveis****************
     int iD = 0;
 
@@ -75,7 +88,7 @@ public class FXMLEntradaController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-            configurar();
+        configurar();
     }
 
     public void configurar() {
@@ -98,12 +111,15 @@ public class FXMLEntradaController implements Initializable {
 
             if (event.getCode() == KeyCode.ENTER & !texto.isEmpty()) {
                 tfNome.setText(inicialMaiuscula(texto));
+                
             }
         });
 
         tfPlaca.setOnAction((event) -> {
             //salva e fecha
             entrada();
+            //metodo de outra classe que carrega um combobox 
+            FXMLPrincipal.preencherJCombobox();
             //finalizar janela
             Stage stage = (Stage) btnCancelar.getScene().getWindow(); //pegar tela atual
             stage.close(); //fechar
@@ -126,13 +142,14 @@ public class FXMLEntradaController implements Initializable {
             }
 
         });
+        
+        FXMLPrincipal.preencherJCombobox();
 
     }
 
     @FXML
     //ao apertar botão de cancelar fechar a janela
     public void botaoCancelar() {
-        FXMLPrincipal.RAIZ.preencherJCombobox();
         //finalizar janela
         Stage stage = (Stage) btnCancelar.getScene().getWindow(); //pegar tela atual
         stage.close(); //fechar
@@ -158,30 +175,42 @@ public class FXMLEntradaController implements Initializable {
             Stage stage = (Stage) btnOk.getScene().getWindow(); //pegar tela atual
             stage.close(); //fechar
         } else {
-            alerta("erro", "não foi possivel registrar os dados");
+            alerta("algo deu errado!", "anote as informações e reinicie o programa!");
             //criar codigo que reinicie a aplicação principal
         }
+        
+        FXMLPrincipal.preencherJCombobox();
 
     }
 
     //capiturar os dados e salvar em txt
     public Boolean entrada() {
         try {
+            Path path;            
+            byte[] bytes;
+            //criando essa separação nos dados de registro de entrada para usar apenas a hora registrada
+            String[] registroDeEntrada = tfEntrada.getText().split(":");
 
-            byte[] bytes = Files.readAllBytes(Metodos.relatorio());
+            //se a hora for menor que a hora no registro de entrada, uso o arquivo do dia anterior
+            if (Integer.parseInt(Metodos.dataHora("apenasHora")) < Integer.parseInt(registroDeEntrada[0])) {
+                bytes = Files.readAllBytes(Metodos.voltarDiaRelatorio());
+                path = Metodos.voltarDiaRelatorio();
+            } else {
+                //aqui sera registrado no arquivo do dia atual
+                bytes = Files.readAllBytes(Metodos.relatorio());
+                path = Metodos.relatorio();
+            }
+
             String relatorio = new String(bytes);
-
             ArrayList<String> entrada = new ArrayList<>();
             entrada.add(0, relatorio);
             entrada.add(1, "Casa: " + tfCasa.getText());
             entrada.add(2, "Nome: " + tfNome.getText());
             entrada.add(3, "Placa: " + tfPlaca.getText().toUpperCase(Locale.ROOT));
-            entrada.add(4, "Entrada: " + tfEntrada.getText());
-            entrada.add(5, "Saida:");
-            Files.write(Metodos.relatorio(), entrada, Charset.defaultCharset());
-
-            //metodo de outra classe que carrega um combobox 
-            FXMLPrincipal.RAIZ.preencherJCombobox();
+            entrada.add(4, "anotação: " + textAreaObservacao.getText().trim());
+            entrada.add(5, "Entrada: " + tfEntrada.getText());
+            entrada.add(6, "Saida:");
+            Files.write(path, entrada, Charset.defaultCharset());
 
             return true;
 
@@ -209,18 +238,17 @@ public class FXMLEntradaController implements Initializable {
             entrada.add(3, "Placa: " + tfPlaca.getText().toUpperCase(Locale.ROOT));
             entrada.add(4, "Entrada: " + tfEntrada.getText());
             entrada.add(5, "Saida:");
-            entrada.add(6, "");
+            entrada.add(6, "\n");
             //aqui sera criado nova entrada para o passageiro do uber 
             entrada.add(7, "Casa: " + tfCasa.getText());
             entrada.add(8, "Nome: " + tfNome.getText() + " veio de uber");
             entrada.add(9, "Placa: " + " esta sem carro");
-            entrada.add(10, "Entrada: " + tfEntrada.getText());
-            entrada.add(11, "Saida:");
+            entrada.add(10, "anotação: " + textAreaObservacao.getText().trim());
+            entrada.add(11, "Entrada: " + tfEntrada.getText());
+            entrada.add(12, "Saida:");
 
             //escreve em um arquivo
             Files.write(Metodos.relatorio(), entrada, Charset.defaultCharset());
-            //metodo de outra classe que carrega um combobox
-            FXMLPrincipal.RAIZ.preencherJCombobox();
 
             return true;
 
@@ -231,6 +259,7 @@ public class FXMLEntradaController implements Initializable {
         }
     }
 
+    @Override
     public String inicialMaiuscula(String string) {
         ArrayList nome = new ArrayList();
         String[] split = string.split("\\s");
